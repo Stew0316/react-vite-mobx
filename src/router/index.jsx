@@ -1,11 +1,29 @@
 import {
   createBrowserRouter,
+  createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
-import App from "../App";
-export default createBrowserRouter([
+import { Route } from 'react-router'
+import App from "@/views/App";
+const route = [
   {
     path: "/",
-    element: <App></App>,
+    async loader({ request, params }) {
+      let comp = await import("../views/App");
+      return comp;
+    },
+    lazy: () => import("../views/App"),
+    // lazy: () => import('@/views/App')
+    // element: <App></App>,
   },
-]);
+
+]
+// const route = createRoutesFromElements(
+//   <Route path="/" element={<App />}>
+//     <Route path="Login" index lazy={() => import("@/views/auth/Login")} />
+//   </Route>
+// )
+const router = createBrowserRouter(route, {
+  basename: import.meta.env.VITE_BASE_NAME
+});
+export default router
