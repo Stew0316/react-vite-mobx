@@ -8,12 +8,7 @@ import App from "@/views/App";
 const route = [
   {
     path: "/",
-    async loader({ request, params }) {
-      let comp = await import("../views/App");
-      return comp;
-    },
     lazy: () => import("../views/App"),
-    // lazy: () => import('@/views/App')
     // element: <App></App>,
   },
 

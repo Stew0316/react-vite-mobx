@@ -34,4 +34,11 @@ function App() {
   )
 }
 
+export function Component() {
+  return (
+    <>
+      <span>这里是comp</span>
+    </>
+  )
+}
 export default observer(App)
