@@ -1,0 +1,14 @@
+.login {
+  height: 100vh;
+  background: skyblue;
+  :global {
+    .cont {
+      width: 500px;
+      background: #fff;
+      border-radius: 10px;
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
