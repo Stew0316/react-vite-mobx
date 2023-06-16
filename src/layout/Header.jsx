@@ -1,6 +1,9 @@
-function Header() {
+import Style from '@/style/Header.module.scss'
+
+function Header(props) {
+  
   return (
-    <div className="header">
+    <div className={`${Style.header} ${props.className}`}>
       这里是header
     </div>
   )

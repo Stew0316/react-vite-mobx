@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import Header from '@/layout/header'
 import Side from '@/layout/Side'
+import Style from '@/style/Home.module.scss'
+import { Outlet } from 'react-router'
 function Home() {
   return (
-    <div>
-      <Header></Header>
-      <Side></Side>
-      这里是home
+    <div className={`${Style.Home}`}>
+      <Header className='header'></Header>
+      <div className='wrap'>
+        <Side className='side'></Side>
+        <div className='route'>
+          <Outlet></Outlet>
+        </div>
+      </div>
     </div>
   )
 }

@@ -23,7 +23,7 @@ function Login() {
           value={userPWD}
           onChange={e => change(e, setUserPWD)}
         ></Input>
-        <Button className='btn' type="primary" onClick={() => navigate('/Home')}>登录</Button>
+        <Button className='btn' type="primary" onClick={() => navigate('/home/index')}>登录</Button>
       </div>
     </div>
   )
