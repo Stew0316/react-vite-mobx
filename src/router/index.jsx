@@ -2,12 +2,15 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  
 } from "react-router-dom";
 import { Route } from 'react-router'
 import App from "@/views/App";
 import Login from "@/views/auth/Login";
 import Home from "@/views/home/Home";
 import Index from '@/views/index/Index'
+import Others from '@/views/others/Others'
+import Clock from '@/views/others/Clock'
 // const route = [
 //   {
 //     path: "/",
@@ -21,6 +24,9 @@ const route = createRoutesFromElements(
     <Route path="login" index element={<Login />} />
     <Route path="home" element={<Home />} >
       <Route path="index" index element={<Index />}></Route>
+    </Route>
+    <Route path="others" lazy={() => import("../views/others/Others")}>
+      <Route index element={<Clock />}></Route>
     </Route>
   </Route>
 )

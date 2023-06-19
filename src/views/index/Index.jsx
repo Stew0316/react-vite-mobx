@@ -50,9 +50,6 @@ function Index() {
   //e
   let e_x_end = start + 180 + 255 + 180 + 180 + 105 + 180
   let e_y_end = height / 2
-  console.log('e_x_end,e_y_end',e_x_end,e_y_end)
-  console.log('w_x,w_y',w_x,w_y)
-  console.log('m_x,m_y',m_x,m_y)
   let e_deg_end = 0;
   function ctx_w() {
     let mark;

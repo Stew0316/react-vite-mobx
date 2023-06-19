@@ -36,13 +36,13 @@ import zhCN from 'antd/locale/zh_CN';
 //   )
 // }
 
-// export function Component() {
-//   return (
-//     <>
-//       <span>这里是comp</span>
-//     </>
-//   )
-// }
+export function Component() {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <Outlet />
+    </ConfigProvider>
+  )
+}
 function App() {
   return (
     <ConfigProvider locale={zhCN}>
