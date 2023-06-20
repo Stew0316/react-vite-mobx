@@ -1,9 +1,9 @@
 # 版本
-react--18
-mobx--6.9
-antd--5.6
-sass--1.63.4
-vite--4.3.9
+react--18  
+mobx--6.9  
+antd--5.6  
+sass--1.63.4  
+vite--4.3.9  
 react-router--6.12.1
 # 说明
 是一个为了学后端和学react写的简单后台管理项目，简单使用mobx的observe和react的hook，添加了自定义的iconfont，简单使用react-router的lazy
