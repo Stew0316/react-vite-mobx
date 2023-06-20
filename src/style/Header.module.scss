@@ -11,5 +11,24 @@
         margin-right: 16px;
       }
     }
+    .right {
+      .drop {
+        cursor: pointer;
+        // color: dodgerblue;
+        margin-left: 20px;
+        .svgs {
+          font-size: 12px;
+          margin-left: 5px;
+        }
+      }
+      .svgs {
+        margin-right: 8px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      .link {
+        color: #000;
+      }
+    }
   }
 }

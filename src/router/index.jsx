@@ -9,8 +9,8 @@ import App from "@/views/App";
 import Login from "@/views/auth/Login";
 import Home from "@/views/home/Home";
 import Index from '@/views/index/Index'
-import Others from '@/views/others/Others'
 import Clock from '@/views/others/Clock'
+import People from '@/views/user/People'
 // const route = [
 //   {
 //     path: "/",
@@ -28,6 +28,7 @@ const route = createRoutesFromElements(
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>
     </Route>
+    <Route path="people" element={<People />}></Route>
   </Route>
 )
 const router = createBrowserRouter(route, {
