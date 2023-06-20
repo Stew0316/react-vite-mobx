@@ -40,7 +40,7 @@ function HeaderBar(props) {
         <a className='link' href="https://github.com/fenglingnan/react-vite-mobx">
           <GithubOutlined className='svgs' />
         </a>
-        <ShareAltOutlined className='svgs' />
+        <ShareAltOutlined onClick={e => nav('/others')} className='svgs' />
         <Dropdown
           menu={{
             items,

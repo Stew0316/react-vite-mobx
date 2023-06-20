@@ -11,6 +11,7 @@ import Home from "@/views/home/Home";
 import Index from '@/views/index/Index'
 import Clock from '@/views/others/Clock'
 import People from '@/views/user/People'
+import Tree from "@/views/others/Tree"
 // const route = [
 //   {
 //     path: "/",
@@ -21,12 +22,13 @@ import People from '@/views/user/People'
 // ]
 const route = createRoutesFromElements(
   <Route path="/" element={<App />}>
-    <Route path="login" index element={<Login />} />
+    <Route index element={<Login />} />
     <Route path="home" element={<Home />} >
-      <Route path="index" index element={<Index />}></Route>
+      <Route index element={<Index />}></Route>
     </Route>
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>
+      <Route path='tree' element={<Tree />}></Route>
     </Route>
     <Route path="people" element={<People />}></Route>
   </Route>
