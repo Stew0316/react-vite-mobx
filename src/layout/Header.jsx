@@ -14,7 +14,7 @@ function HeaderBar(props) {
         nav('/people')
       },
       2: () => {
-        nav('/login', {replace: true})
+        nav('/', {replace: true})
       }
     }
     eventMap[key]()

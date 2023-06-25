@@ -14,20 +14,18 @@ function Open(props) {
     <div className={`${props.className}`}>
       <nav className={`top-right ${opend ? 'open' : ''}`}>
         <div className="disc l1" onClick={() => navi('/others')}>
-          <div>Clock</div>
+          <div>时钟</div>
         </div>
         <div className="disc l2" onClick={() => navi('/others/tree')}>
-          <div>Tree</div>
+          <div>树</div>
         </div>
         <div className="disc l3">
           <div>Profile</div>
         </div>
-        <div className="disc l4">
-          <div>Likes</div>
+        <div className="disc l4" onClick={() => navi(-1)}>
+          <div>返回</div>
         </div>
-        <div className="disc l5 toggle" ref={togRef} onClick={menuClick}>
-          Menu
-        </div>
+        <div className="disc l5 toggle" ref={togRef} onClick={menuClick}>菜单</div>
       </nav>
     </div>
   )

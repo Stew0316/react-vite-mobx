@@ -1,13 +1,82 @@
 .login {
   height: 100vh;
-  background: skyblue;
+  background: rgb(109,157,154);
+  display: flex;
+  align-items: center;
   :global {
     .cont {
-      width: 500px;
-      background: #fff;
+      width: 50vw;
+      height: 80vh;
+      background:  linear-gradient(95deg, rgb(25,80,89) 45%, rgb(255,186,50) 0);
       border-radius: 10px;
+      display: flex;
+
       .btn {
-        width: 100%;
+        background: rgb(26,84,92);
+        height: 45px;
+        margin-top: 30px;
+      }
+      .left {
+        width: 48%;
+        background: url('@/source/col.png') no-repeat 40% center / auto 330px;
+      }
+      .right {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .forms {
+          background: #fff;
+          border-radius: 8px;
+          box-shadow: 0 0 15px #999;
+          width: 260px;
+          margin-bottom: 30px;
+          .inp {
+            padding: 16px 12px;
+            .user {
+              height: 40px;
+              margin-bottom: 10px;
+            }
+            .pwd {
+              height: 40px;
+            }
+          }
+          .login-yet {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            padding: 0 12px;
+            box-shadow: 0 5px 10px #ededed;
+            span:nth-child(1) {
+              color:#CD853F;
+              font-size: 14px;
+              font-weight: 600;
+              
+            }
+            span:nth-child(2) {
+              font-size: 13px;
+              color:	#D3D3D3;
+            }
+          }
+        }
+        .word {
+          text-align: center;
+          font-size: 14px;
+          p {
+            word-break: break-all;
+            letter-spacing: 2px;
+          }
+          p:nth-child(1) {
+            color: #F5FFFA;
+            font-weight: 600;
+          }
+          p:nth-child(2) {
+            font-weight: 600;
+            color: rgb(26,84,92);
+          }
+        }
       }
     }
   }
