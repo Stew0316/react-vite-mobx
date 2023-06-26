@@ -1,20 +1,25 @@
 import Style from '@/style/Side.module.scss'
 import { Menu } from 'antd';
 import { useState } from 'react';
-import { MailOutlined, SettingOutlined, AppstoreOutlined  } from '@ant-design/icons';
+import { BarChartOutlined, SettingOutlined, TableOutlined  } from '@ant-design/icons';
 import { ICON_CODE } from '@/common/IconFont'
 import { useLocation, useMatch, useNavigate  } from 'react-router';
 //这里的key取路径的最后一部分/home/index取index，/home/index/test取test，方便刷新取location重新赋值
 const items = [
   {
     label: '首页',
-    key: '/',
+    key: '/home/',
     icon: <ICON_CODE type="iconhome" />,
   },
   {
     label: 'echarts面板',
-    key: 'echartsMask',
-    icon: <AppstoreOutlined />,
+    key: '/home/echartsMask',
+    icon: <BarChartOutlined />,
+  },
+  {
+    label: '表格表单',
+    key: '/home/business',
+    icon: <TableOutlined />,
   },
   // {
   //   label: 'Navigation Three - Submenu',
@@ -62,16 +67,15 @@ const items = [
 ]
 
 function Side(props) {
-  const [current, setCurrent] = useState('/');
+  
   const locate = useLocation()
   const navi = useNavigate()
   const mat = useMatch(locate.pathname)
-  console.log(mat)
+  const [current, setCurrent] = useState(mat.pathname);
   const onClick = (e) => {
-    console.log('click ', e);
     setCurrent(e.key);
     if(e.key) {
-      navi(`/home/${e.key}`)
+      navi(e.key)
     }
   };
   return (
