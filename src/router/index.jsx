@@ -14,6 +14,9 @@ import People from '@/views/user/People'
 import Tree from "@/views/others/Tree"
 import EchartsMask from "@/views/echarts/EchartsMask";
 import Business from "@/views/business/Business"
+import MenuSet from "@/views/permission/MenuSet"
+import Role from "@/views/permission/Role"
+import Account from "@/views/permission/Account"
 // const route = [
 //   {
 //     path: "/",
@@ -29,6 +32,9 @@ const route = createRoutesFromElements(
       <Route index element={<Index />}></Route>
       <Route path="echartsMask" element={<EchartsMask />}></Route>
       <Route path="business" element={<Business />}></Route>
+      <Route path="menuSet" element={<MenuSet />}></Route>
+      <Route path="role" element={<Role />}></Route>
+      <Route path="account" element={<Account />}></Route>
     </Route>
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>

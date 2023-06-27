@@ -99,6 +99,11 @@ function Business() {
           <Button htmlType="submit" type="primary">查询</Button>
         </Form.Item>
       </Form>
+      
+      <div>
+        <Button>导出excel</Button>
+        <Button>导入excel</Button>
+      </div>
       <Table columns={columns} dataSource={data} />
       <Modal title="Basic Modal" open={opend} onOk={() => setOpend(false)} onCancel={() => setOpend(false)}>
         <p>Some contents...</p>

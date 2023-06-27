@@ -1,7 +1,7 @@
 import Style from '@/style/Side.module.scss'
 import { Menu } from 'antd';
 import { useState } from 'react';
-import { BarChartOutlined, SettingOutlined, TableOutlined  } from '@ant-design/icons';
+import { BarChartOutlined, AppstoreOutlined, TableOutlined  } from '@ant-design/icons';
 import { ICON_CODE } from '@/common/IconFont'
 import { useLocation, useMatch, useNavigate  } from 'react-router';
 //这里的key取路径的最后一部分/home/index取index，/home/index/test取test，方便刷新取location重新赋值
@@ -21,6 +21,24 @@ const items = [
     key: '/home/business',
     icon: <TableOutlined />,
   },
+  {
+    icon: <AppstoreOutlined />,
+    label: '设置',
+    children: [
+      {
+        label: '菜单',
+        key: '/home/menuSet',
+      },
+      {
+        label: '角色',
+        key: '/home/role',
+      },
+      {
+        label: '账号',
+        key: '/home/account',
+      },
+    ]
+  }
   // {
   //   label: 'Navigation Three - Submenu',
   //   key: 'SubMenu',
@@ -80,9 +98,15 @@ function Side(props) {
   };
   return (
     <div className={`${props.className} ${Style.sidebar}`}>
-      <Menu style={{
-        width: '100%',
-      }} onClick={onClick} selectedKeys={[current]} mode="inline" items={items} />;
+      <Menu 
+        style={{
+          width: '100%',
+        }}
+        onClick={onClick} 
+        selectedKeys={[current]} 
+        mode="inline" 
+        items={items} 
+      />
     </div>
   )
 }
