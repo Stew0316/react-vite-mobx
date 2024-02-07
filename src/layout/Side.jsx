@@ -1,7 +1,7 @@
 import Style from '@/style/Side.module.scss'
 import { Menu } from 'antd';
 import { useState } from 'react';
-import { BarChartOutlined, AppstoreOutlined, TableOutlined  } from '@ant-design/icons';
+import { BarChartOutlined, AppstoreOutlined, TableOutlined, LockOutlined } from '@ant-design/icons';
 import { ICON_CODE } from '@/common/IconFont'
 import { useLocation, useMatch, useNavigate  } from 'react-router';
 //这里的key取路径的最后一部分/home/index取index，/home/index/test取test，方便刷新取location重新赋值
@@ -22,20 +22,35 @@ const items = [
     icon: <TableOutlined />,
   },
   {
+    label: '权限管理',
+    key: '/home/permission',
+    icon: <LockOutlined />,
+    children: [
+      {
+        label: '角色',
+        key: '/home/role',
+      },
+    ]
+  },
+  {
     icon: <AppstoreOutlined />,
-    label: '设置',
+    label: '系统管理',
     children: [
       {
         label: '菜单',
         key: '/home/menuSet',
       },
       {
-        label: '角色',
-        key: '/home/role',
+        label: '用户',
+        key: '/home/users',
       },
       {
         label: '账号',
         key: '/home/account',
+      },
+      {
+        label: '字典',
+        key: '/home/dict',
       },
     ]
   }

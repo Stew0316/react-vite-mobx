@@ -10,13 +10,15 @@ import Login from "@/views/auth/Login";
 import Home from "@/views/home/Home";
 import Index from '@/views/index/Index'
 import Clock from '@/views/others/Clock'
-import People from '@/views/user/People'
+import People from '@/views/person/People'
 import Tree from "@/views/others/Tree"
 import EchartsMask from "@/views/echarts/EchartsMask";
 import Business from "@/views/business/Business"
-import MenuSet from "@/views/permission/MenuSet"
+import MenuSet from "@/views/system/MenuSet"
 import Role from "@/views/permission/Role"
-import Account from "@/views/permission/Account"
+import Account from "@/views/system/Account"
+import Dict from "@/views/system/Dict";
+import Users from '@/views/system/Users'
 // const route = [
 //   {
 //     path: "/",
@@ -35,6 +37,8 @@ const route = createRoutesFromElements(
       <Route path="menuSet" element={<MenuSet />}></Route>
       <Route path="role" element={<Role />}></Route>
       <Route path="account" element={<Account />}></Route>
+      <Route path="dict" element={<Dict />}></Route>
+      <Route path="users" element={<Users />}></Route>
     </Route>
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>

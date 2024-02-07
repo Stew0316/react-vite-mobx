@@ -74,35 +74,33 @@ function Business() {
     
   ]
   return (
-    <>
+    <div className='container'>
       <Form
         layout='inline'
-        
+        className='base-form'
         onFinish={onFinish}
       >
         <Form.Item 
           label="名称" 
-          rules={[{ required: true, message: '请输入名称'}]}
           name='name'
         >
           <Input placeholder="请输入名称" />
         </Form.Item>
         <Form.Item 
           label="日期" 
-          rules={[{ required: true, message: '请选择时间',}]}
           name='time'
         >
           <RangePicker />
         </Form.Item>
         <Form.Item >
-          <Button>重置</Button>
-          <Button htmlType="submit" type="primary">查询</Button>
+          <Button className='reset'>重置</Button>
+          <Button htmlType="submit" type="primary" className='submit'>查询</Button>
         </Form.Item>
       </Form>
       
-      <div>
-        <Button>导出excel</Button>
-        <Button>导入excel</Button>
+      <div style={{marginBottom: '12px'}}>
+        <Button style={{marginRight: '8px'}}>导出excel</Button>
+        <Button type="primary">导入excel</Button>
       </div>
       <Table columns={columns} dataSource={data} />
       <Modal title="Basic Modal" open={opend} onOk={() => setOpend(false)} onCancel={() => setOpend(false)}>
@@ -110,7 +108,7 @@ function Business() {
         <p>Some contents...</p>
         <p>Some contents...</p>
       </Modal>
-    </>
+    </div>
   )
 }
 

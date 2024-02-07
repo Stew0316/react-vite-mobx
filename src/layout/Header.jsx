@@ -1,5 +1,5 @@
 import Style from '@/style/Header.module.scss'
-import { Dropdown } from 'antd'
+import { Dropdown, Tooltip  } from 'antd'
 import { DownOutlined, SmileOutlined, GithubOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { observer } from 'mobx-react'
@@ -36,11 +36,14 @@ function HeaderBar(props) {
         <span>{name}</span>
       </div>
       <div className='right'>
-        
-        <a className='link' href="https://github.com/fenglingnan/react-vite-mobx">
-          <GithubOutlined className='svgs' />
-        </a>
-        <ShareAltOutlined onClick={e => nav('/others')} className='svgs' />
+        <Tooltip title='项目github地址'>
+          <a target='_blank' className='link' href="https://github.com/fenglingnan/react-vite-mobx">
+            <GithubOutlined className='svgs' />
+          </a>
+        </Tooltip>
+        <Tooltip title='一些小效果'>
+          <ShareAltOutlined onClick={e => nav('/others')} className='svgs' />
+        </Tooltip>
         <Dropdown
           menu={{
             items,

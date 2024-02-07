@@ -19,4 +19,14 @@ button {
   align-items: center;
   justify-content: center;
 }
+.container {
+  padding: 16px;
+}
+.base-form {
+  padding: 12px 0;
+  margin-bottom: 12px;
+}
+.base-form .reset {
+  margin-right: 8px;
+}
 
