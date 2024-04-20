@@ -14,7 +14,7 @@
       .btn {
         background: rgb(26,84,92);
         height: 45px;
-        margin-top: 30px;
+        // margin-top: 30px;
       }
       .left {
         width: 48%;
@@ -40,6 +40,11 @@
             }
             .pwd {
               height: 40px;
+              margin-bottom: 10px;
+            }
+            .code {
+              height: 40px;
+
             }
           }
           .login-yet {

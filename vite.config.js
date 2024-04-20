@@ -13,6 +13,14 @@ export default ({mode}) => {
     plugins: [react()],
     server: {
       port: env.VITE_PORT,
+      proxy: {
+        [env.VITE_API]: {
+					changeOrigin: true,
+					// rewrite: path => path.replace(/^\/api/, ''),
+          //本地localhost
+					target: "http://localhost:8000"
+				},
+      }
     },
     resolve: {
       alias: {
