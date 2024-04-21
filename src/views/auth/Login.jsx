@@ -15,15 +15,17 @@ function Login() {
     setCodePic(res.image)
   }
   const onFinish = (values) => {
-    console.log('Success:', values, md5(123));
     log({
       ...values,
       password: md5(values.password)
     })
   };
   const log = async (data) => {
-    let res = await submit(data)
-    console.log(res)
+    let res = await submit(data).catch(() => {
+      getCode()
+    })
+    localStorage.setItem('token', res.token)
+    navigate('/home')
   }
   useEffect(() => {
     getCode()

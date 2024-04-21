@@ -53,6 +53,10 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
+    const token = localStorage.getItem('token')
+    if(token) {
+      config.token = token
+    }
     return config
   },
   (err) => {
@@ -77,7 +81,10 @@ service.interceptors.response.use(
     if(response.data.code == 200) {
       return response.data.data
     }
-    return response.data
+    if(!response.config.cancelMessage) {
+      message.error(response.data.msg)
+    }
+    return Promise.reject(response.data)
   },
   (err)=>{
     // const [messageApi, contextHolder] = message.useMessage();

@@ -14,6 +14,7 @@ function HeaderBar(props) {
         nav('/people')
       },
       2: () => {
+        localStorage.removeItem('token')
         nav('/', {replace: true})
       }
     }

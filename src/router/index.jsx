@@ -19,6 +19,7 @@ import Role from "@/views/permission/Role"
 import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
+import Map from "@/views/index/map";
 // const route = [
 //   {
 //     path: "/",
@@ -31,7 +32,7 @@ const route = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<Login />} />
     <Route path="home" element={<Home />} >
-      <Route index element={<Index />}></Route>
+      <Route index element={<Map />}></Route>
       <Route path="echartsMask" element={<EchartsMask />}></Route>
       <Route path="business" element={<Business />}></Route>
       <Route path="menuSet" element={<MenuSet />}></Route>
