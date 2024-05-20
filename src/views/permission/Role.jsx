@@ -1,16 +1,20 @@
-import { Button, DatePicker, Form, Input, Space, Table, Tag, Switch, Popconfirm, Modal, Select  } from 'antd';
+import { Button, DatePicker, Form, Input, Space, Table, Tag, Switch, Popconfirm, Modal, Select, message  } from 'antd';
 import {
   DeleteOutlined,
   PlusOutlined,
   EditOutlined,
-  EyeOutlined
+  EyeOutlined,
+  ExclamationCircleFilled 
 } from '@ant-design/icons';
 import { useState } from 'react';
+const { confirm } = Modal;
 const Role = () => {
   const [tenantList, setTenantList] = useState([{ value: 'sample', label: <span>sample</span> }]);
   const [checkStrictly, setCheckStrictly] = useState(false);
+  const [selectData, setSelectData] = useState([]);
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
+      setSelectData(selectedRows)
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     onSelect: (record, selected, selectedRows) => {
@@ -22,10 +26,8 @@ const Role = () => {
   };
   const columns = [
     {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      width: 60
+      title: '序号',
+      render:(text,record,index)=>`${index+1}`,
     },
     {
       title: '角色名称',
@@ -52,9 +54,9 @@ const Role = () => {
       dataIndex: 'address',
       key: 'address',
       width: 280,
-      render: (address) => (
+      render: (data, data2, data3, data4,data5) => (
         <>
-          <Button icon={<EyeOutlined />} type="link">查看</Button>
+          <Button icon={<EyeOutlined />} type="link" onClick={() => view(data, data2, data3, data4,data5)}>查看</Button>
           <Button icon={<EditOutlined />} type="link">编辑</Button>
           <Button icon={<DeleteOutlined />} type="link">删除</Button>
         </>
@@ -128,6 +130,30 @@ const Role = () => {
   function onFinish(e) {
     console.log('onFinish', e)
   }
+  const reset = () => {
+    console.log('reset')
+  }
+  const allDel = () => {
+    console.log('alldel',selectData)
+    if(selectData.length == 0) return message.open({
+      type: 'error',
+      content: '请先选择一个角色'
+    })
+    confirm({
+      title: '删除',
+      icon: <ExclamationCircleFilled />,
+      content: '是否确认删除？',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+  const view = (text, record, index) => {
+    console.log(text, record, index)
+  }
   return (
     <div className="container">
       <Form
@@ -159,13 +185,13 @@ const Role = () => {
           <Input placeholder="请输入角色别名" />
         </Form.Item>
         <Form.Item >
-          <Button className='reset'>重置</Button>
+          <Button className='reset' onClick={reset}>重置</Button>
           <Button htmlType="submit" type="primary" className='submit'>查询</Button>
         </Form.Item>
       </Form>
       <div style={{marginBottom: '12px'}}>
         <Button icon={<PlusOutlined />} style={{marginRight: '8px'}} type="primary">新增</Button>
-        <Button icon={<DeleteOutlined />}  type="primary" danger>删除</Button>
+        <Button icon={<DeleteOutlined />} onClick={allDel} type="primary" danger>删除</Button>
       </div>
       <div>
         <Table
