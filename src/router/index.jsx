@@ -19,7 +19,7 @@ import Role from "@/views/permission/Role"
 import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
-import Map from "@/views/index/map";
+import Map from "@/views/index/Map";
 // const route = [
 //   {
 //     path: "/",
