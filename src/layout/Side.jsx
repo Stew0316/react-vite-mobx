@@ -114,8 +114,10 @@ function Side(props) {
   return (
     <div className={`${props.className} ${Style.sidebar}`}>
       <Menu 
+        className='menus'
         style={{
           width: '100%',
+          height: '100%',
         }}
         onClick={onClick} 
         selectedKeys={[current]} 
