@@ -1,0 +1,16 @@
+.user {
+  display: flex;
+  background-color: #f0f2f5;
+  padding: 12px;
+  :global {
+    .left {
+      // flex: 1;
+      width: 350px;
+    }
+    .right {
+      background-color: #fff;
+      flex: 1;
+      // width: 70%;;
+    }
+  }
+}

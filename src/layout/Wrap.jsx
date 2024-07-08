@@ -10,7 +10,7 @@ const Wrap = ({children, getData,columns,Btn, ...props}) => {
     formRef.current.resetFields()
   }
   return (
-    <div className={props.className}>
+    <div className={`container ${props.className}`}>
       <Form
         layout='inline'
         className='base-form'
