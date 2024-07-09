@@ -2,15 +2,27 @@
   display: flex;
   background-color: #f0f2f5;
   padding: 12px;
+  height: 100%;
+  box-sizing: border-box;
   :global {
     .left {
-      // flex: 1;
       width: 350px;
+      box-sizing: border-box;
+      margin-right: 6px;
+      .top {
+        border-radius: 6px;
+        padding: 12px;
+        background-color: #fff;
+      }
     }
     .right {
       background-color: #fff;
       flex: 1;
+      border-radius: 6px;
       // width: 70%;;
+    }
+    .site-tree-search-value {
+      color: #f50;
     }
   }
 }

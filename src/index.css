@@ -29,4 +29,10 @@ button {
 .base-form .reset {
   margin-right: 8px;
 }
-
+.btns {
+  display: flex;
+  margin-bottom: 9px;
+}
+.btns .btn {
+  margin-right: 6px;
+}
