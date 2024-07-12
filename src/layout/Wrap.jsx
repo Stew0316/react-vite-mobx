@@ -1,11 +1,11 @@
 import { Form, Button, Table } from "antd"
 import { useRef } from "react"
-const Wrap = ({children, getData,columns,Btn, ...props}) => {
+const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
   const formRef = useRef()
   const onFinish = (values) => {
     getData(values)
   }
-  const data = [];
+  // const data = [];
   const reset = () => {
     formRef.current.resetFields()
   }
@@ -27,7 +27,7 @@ const Wrap = ({children, getData,columns,Btn, ...props}) => {
       <div>
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={tableData}
           {...props}
           className=""
         />

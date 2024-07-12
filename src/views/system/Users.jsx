@@ -1,8 +1,8 @@
 import Wrap from "@/layout/Wrap";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import style from "@/style/User.module.scss";
-import { Input, Tree, Button } from "antd";
-import { PlusOutlined, DeleteOutlined,EyeOutlined } from "@ant-design/icons";
+import { Input, Tree, Button, Form, Select } from "antd";
+import { PlusOutlined, DeleteOutlined,EyeOutlined, EditOutlined } from "@ant-design/icons";
 import UserBtn from "./UserBtn";
 const { Search } = Input;
 const x = 3;
@@ -110,6 +110,8 @@ const Users = () => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
+  const [tableData, setTableData] = useState([{key: 1}]);
+  const [selectData, setSelectData] = useState([]);
   const onExpand = (newExpandedKeys) => {
     setExpandedKeys(newExpandedKeys);
     setAutoExpandParent(false);
@@ -128,6 +130,13 @@ const Users = () => {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+  const rowChange = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    setSelectData(selectedRows);
+  }
+  const getData = () => {
+    console.log('getData');
+  }
   const treeData = useMemo(() => {
     const loop = (data) =>
       data.map((item) => {
@@ -159,6 +168,20 @@ const Users = () => {
       });
     return loop(defaultData);
   }, [searchValue]);
+  const [userOption, setUserOption] = useState([
+    {
+      value: 'jack',
+      label: 'Jack',
+    },
+    {
+      value: 'lucy',
+      label: 'Lucy',
+    },
+    {
+      value: 'Yiminghe',
+      label: 'yiminghe',
+    },
+  ])
   return (
     <div className={`${style.user}`}>
       <div className="left">
@@ -175,12 +198,44 @@ const Users = () => {
       <Wrap 
         className="right"
         columns={columns}
-        Btn={<UserBtn />}
+        tableData={tableData}
+        Btn={
+          <UserBtn 
+            getData={getData}
+            userOption={userOption}
+            selectData={selectData}
+          />
+        }
         rowSelection={{
+          onChange: (selectedRowKeys, selectedRows) => rowChange(selectedRowKeys, selectedRows),
           type: 'checkbox',
         }}
       >
-        
+        <Form.Item
+          label="登录账号" 
+          name='name'
+          key='1'
+        >
+          <Input placeholder="请输入登录账号" />
+        </Form.Item>
+        <Form.Item
+          label="用户名称" 
+          name='name1'
+          key='2'
+        >
+          <Input placeholder="请输入用户名称" />
+        </Form.Item>
+        <Form.Item
+          label="用户平台" 
+          name='name2'
+          key='3'
+        >
+          <Select
+            options={userOption}
+            style={{width: 200}}
+            placeholder="请选择用户平台"
+          />
+        </Form.Item>
       </Wrap>
     </div>
   );

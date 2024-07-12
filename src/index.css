@@ -36,3 +36,8 @@ button {
 .btns .btn {
   margin-right: 6px;
 }
+.dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
