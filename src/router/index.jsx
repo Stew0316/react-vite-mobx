@@ -19,14 +19,14 @@ import Role from "@/views/permission/Role"
 import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
-import Map from "@/views/index/map";
+import Map from "@/views/index/Map";
 // const route = [
 //   {
 //     path: "/",
 //     lazy: () => import("../views/App"),
 //     // element: <App></App>,
 //   },
-
+// test1111
 // ]
 const route = createRoutesFromElements(
   <Route path="/" element={<App />}>
