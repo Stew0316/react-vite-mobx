@@ -12,7 +12,7 @@ function Login() {
   const navigate = useNavigate();
   async function getCode() {
     let res = await authCode()
-    setCodePic(res.image)
+    setCodePic(res)
   }
   const onFinish = (values) => {
     log({
@@ -85,9 +85,12 @@ function Login() {
                   <Input
                     type='text'
                     className='code'
-                    addonAfter={<img src={codePic} onClick={getCode} style={{
-                      cursor: 'pointer'
-                    }} />}
+                    addonAfter={
+                    // <img src={codePic} onClick={getCode} style={{
+                    //   cursor: 'pointer'
+                    // }} />
+                    <div className='codeWrap' onClick={getCode} dangerouslySetInnerHTML={{ __html: codePic }}></div>
+                    }
                     placeholder='请输入验证码'
                   >              
                   </Input>

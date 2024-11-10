@@ -87,8 +87,7 @@ service.interceptors.response.use(
     return Promise.reject(response.data)
   },
   (err)=>{
-    // const [messageApi, contextHolder] = message.useMessage();
-    message.error(JSON.stringify(err))
+    message.error(err.message || JSON.stringify(err))
     err.message =  '请求超时或服务器异常，请检查网络或联系管理员！'
     return Promise.reject(err)
   }

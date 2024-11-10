@@ -44,7 +44,18 @@
             }
             .code {
               height: 40px;
-
+              .ant-input-group-addon {
+                padding: 0;
+              }
+              .codeWrap {
+                height: 30.32px;
+                width: 90px;
+                cursor: pointer;
+                &>svg {
+                  height: 95%;
+                  width: 100%;
+                }
+              }
             }
           }
           .login-yet {
