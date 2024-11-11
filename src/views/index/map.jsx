@@ -1,15 +1,15 @@
 import 'leaflet/dist/leaflet.css'
 import leaflet from 'leaflet'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import chinaJson from './china.json'
 import pic from '/fac.jpg'
-function init() {
-  const canvasRenderer = L.canvas();
+function init(setMap) {
   const map = L.map('map', {
     center: L.latLng(28.431, 119.008),
     zoom: 4,
     preferCanvas: true
   });
+  setMap(map)
   var canvasLayer = L.layerGroup().addTo(map);
   // 这里需要在env里自己配一个maptoken，来自于mapbox的token
   const key = import.meta.env.VITE_MAP_TOKEN;
@@ -23,9 +23,9 @@ function init() {
 }
 
 function Map () {
-  
+  const [map, setMap] = useState(null)
   useEffect(() => {
-    init()
+    init(setMap)
   }, [])
   return (
     <div id='map' style={{

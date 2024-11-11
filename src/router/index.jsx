@@ -20,6 +20,8 @@ import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
 import Map from "@/views/index/Map";
+import Error404 from "@/views/error/404";
+import Error403 from "@/views/error/403";
 // const route = [
 //   {
 //     path: "/",
@@ -46,6 +48,8 @@ const route = createRoutesFromElements(
       <Route path='tree' element={<Tree />}></Route>
     </Route>
     <Route path="people" element={<People />}></Route>
+    <Route path="403" element={<Error403 />}></Route>
+    <Route path="*" element={<Error404 />}></Route>
   </Route>
 )
 const router = createBrowserRouter(route, {
