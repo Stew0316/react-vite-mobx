@@ -22,7 +22,7 @@ function Open(props) {
         <div className="disc l3">
           <div>Profile</div>
         </div>
-        <div className="disc l4" onClick={() => navi('/home')}>
+        <div className="disc l4" onClick={() => navi(-1)}>
           <div>返回</div>
         </div>
         <div className="disc l5 toggle" ref={togRef} onClick={menuClick}>菜单</div>
