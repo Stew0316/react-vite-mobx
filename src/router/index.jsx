@@ -7,6 +7,7 @@ import {
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { Route } from 'react-router'
+import  useAuth  from '@/hooks/auth'
 import App from "@/views/App";
 import Login from "@/views/auth/Login";
 import Home from "@/views/home/Home";
@@ -40,22 +41,18 @@ const PrivateRoute = ({ children }) => {
    * 需要添加nprogress进度条，有toke的时候显示进度条登录，成功跳转，失败则返回登录页
    * auth数据是ai生成，需要更改，当前只是为了验证路由拦截
    * */ 
-  // const auth = useAuth();
-  const auth = {
-    isLoggedIn: true
-  }
+  const auth = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (!auth.isLoggedIn) {
+    if (!auth) {
       navigate('/', {
         replace: true,
         state: { from: location.pathname }
       });
     }
-  }, [auth.isLoggedIn]);
+  }, [auth]);
 
-  return auth.isLoggedIn ? children : null;
+  return auth ? children : null;
 };
 const route = createRoutesFromElements(
   <Route path="/" element={<App />}>
