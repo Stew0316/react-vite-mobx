@@ -22,7 +22,7 @@ import Role from "@/views/permission/Role"
 import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
-import Map from "@/views/index/Map";
+import Map from "@/views/index/map";
 import Error404 from "@/views/error/404";
 import Error403 from "@/views/error/403";
 // const route = [
