@@ -138,13 +138,6 @@ const Dict = () => {
       ),
     },
   ];
-
-  const view = (text, record, index) => {
-    console.log(text, record, index);
-  };
-  const visibleChange = (value) => {
-    setVisible(value);
-  };
   return (
     <>
       <Wrap
