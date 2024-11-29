@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { message } from 'antd';
-
+import { LOCAL_ENV } from '@/common/localData'
 const showStatus = (status) => {
   let message = ''
   switch (status) {
@@ -44,7 +44,7 @@ const showStatus = (status) => {
 }
 
 const service = axios.create({
-  baseURL: import.meta.env.VITE_API,
+  baseURL: LOCAL_ENV.VITE_API,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
   },
@@ -53,9 +53,9 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem(LOCAL_ENV.VITE_MAIN_KEY+'-token')
     if(token) {
-      config.token = token
+      config.headers.authorization = token
     }
     return config
   },

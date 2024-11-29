@@ -4,6 +4,7 @@ import { Input, Tooltip, Button,Form } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { authCode, submit } from '@/api/auth/login';
 import md5 from 'md5';
+import { LOCAL_ENV } from "@/common/localData";
 function Login() {
   const [username, setUserName] = useState('')
   const [password, setUserPWD] = useState('')
@@ -24,7 +25,7 @@ function Login() {
     let res = await submit(data).catch(() => {
       getCode()
     })
-    localStorage.setItem('token', res.token)
+    localStorage.setItem(LOCAL_ENV.VITE_MAIN_KEY+'-token', res.token)
     navigate('/home')
   }
   useEffect(() => {

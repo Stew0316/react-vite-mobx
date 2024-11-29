@@ -4,7 +4,8 @@ import { DownOutlined, SmileOutlined, GithubOutlined, ShareAltOutlined } from '@
 import { useNavigate } from 'react-router';
 import { observer } from 'mobx-react'
 import userStore from '@/store/user'
-const name = import.meta.env.VITE_NAME
+import { LOCAL_ENV } from "@/common/localData";
+const name = LOCAL_ENV.VITE_NAME
 function HeaderBar(props) {
   const nav = useNavigate()
   

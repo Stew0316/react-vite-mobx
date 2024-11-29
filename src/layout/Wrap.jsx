@@ -8,6 +8,7 @@ const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
   // const data = [];
   const reset = () => {
     formRef.current.resetFields()
+    getData()
   }
   return (
     <div className={`container ${props.className}`}>

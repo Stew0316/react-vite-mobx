@@ -4,6 +4,7 @@ import {
   RouterProvider,
   
 } from "react-router-dom";
+import { LOCAL_ENV } from "@/common/localData"
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { Route } from 'react-router'
@@ -81,6 +82,6 @@ const route = createRoutesFromElements(
   </Route>
 )
 const router = createBrowserRouter(route, {
-  basename: import.meta.env.VITE_BASE_NAME
+  basename: LOCAL_ENV.VITE_BASE_NAME
 });
 export default router

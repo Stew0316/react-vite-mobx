@@ -8,7 +8,7 @@ import { useLocation, useMatch, useNavigate  } from 'react-router';
 const items = [
   {
     label: '首页',
-    key: '/home/',
+    key: '/home',
     icon: <ICON_CODE type="iconhome" />,
   },
   {
@@ -29,6 +29,14 @@ const items = [
       {
         label: '角色',
         key: '/home/role',
+      },
+      {
+        label: '部门',
+        key: '/home/dept',
+      },
+      {
+        label: '机构',
+        key: '/home/tenant',
       },
     ]
   },
