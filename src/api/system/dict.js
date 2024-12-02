@@ -17,3 +17,29 @@ export function delItem(id) {
     }
   })
 }
+
+export function delBatch(ids) {
+  return service({
+    method: 'post',
+    url: '/dict/delete-batch',
+    data: {
+      ids
+    }
+  })
+}
+
+export function addItem(data) {
+  return service({
+    method: 'post',
+    url: '/dict/add',
+    data
+  })
+}
+
+export function editItem(data) {
+  return service({
+    method: 'post',
+    url: '/dict/update',
+    data
+  })
+}

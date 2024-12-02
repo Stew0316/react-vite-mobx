@@ -5,20 +5,18 @@ import {
   EyeOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Wrap from "@/layout/Wrap";
 import DictBtn from "./DictBtn";
 import { getParent, delItem } from "@/api/system/dict";
 import dayjs from "dayjs";
-const { confirm } = Modal;
+import { delConfirm } from "@/utils/feedBack";
 const Dict = () => {
-  const [tenantList, setTenantList] = useState([
-    { value: "sample", label: <span>sample</span> },
-  ]);
   const [tableData, setTableData] = useState([]);
   const [checkStrictly, setCheckStrictly] = useState(false);
   const [selectData, setSelectData] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [modalData, setModalData] = useState({});
+  const btnRef = useRef();
   const [page, setPage] = useState({
     current: 1,
     pageSize: 10,
@@ -49,6 +47,9 @@ const Dict = () => {
         selectedRows
       );
     },
+    getCheckboxProps: (record) => ({
+      disabled: record.hasChildren, // 禁用 `hasChildren` 为 `true` 的行
+    }),
     onSelect: (record, selected, selectedRows) => {
       console.log(record, selected, selectedRows);
     },
@@ -57,27 +58,29 @@ const Dict = () => {
     },
   };
   const delData = (record) => {
-    console.log(record);
-    confirm({
-      title: "是否确定删除?",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        delItem(record.id).then(() => {
-          getList();
-        });
-      },
+    delConfirm().then(() => {
+      delItem(record.id).then(() => {
+        getList();
+      });
     });
+  };
+  const editData = (record) => {
+    btnRef.current.editModal(record);
+  }
+  const pagiChange = (current, pageSize) => {
+    console.log(11,current, pageSize);
+  };
+  const sizeChange = (current, size) => {
+    console.log(22,current, size);
   };
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
-      key: "id",
     },
     {
       title: "字典编号",
       dataIndex: "key",
-      key: "id",
     },
     {
       title: "字典名称",
@@ -85,19 +88,23 @@ const Dict = () => {
       key: "id",
     },
     {
-      title: "字典排序",
-      dataIndex: "sort",
-      key: "sort",
+      title: '父级字典编号',
+      dataIndex: 'code'
     },
     {
-      title: "启用",
+      title: "字典排序",
+      dataIndex: "sort",
+    },
+    {
+      title: "是否停用",
       dataIndex: "isSealed",
-      key: "isSealed",
+      render: (text, record, index) => {
+        return record.isSealed ? "是" : "否";
+      }
     },
     {
       title: "创建时间",
       dataIndex: "createTime",
-      key: "createTime",
       render: (text, record, index) => {
         return text
           ? dayjs(record.createTime).format("YYYY-MM-DD HH:mm:ss")
@@ -107,7 +114,6 @@ const Dict = () => {
     {
       title: "修改时间",
       dataIndex: "updateTime",
-      key: "updateTime",
       render: (text, record, index) => {
         return text
           ? dayjs(record.updateTime).format("YYYY-MM-DD HH:mm:ss")
@@ -117,11 +123,10 @@ const Dict = () => {
     {
       title: "操作",
       dataIndex: "address",
-      key: "address",
-      width: 280,
+      width: 380,
       render: (text, record, index) => (
         <>
-          <Button icon={<EditOutlined />} type="link">
+          <Button icon={<EditOutlined />} type="link" onClick={() => editData(record)}>
             编辑
           </Button>
           <Button
@@ -148,9 +153,18 @@ const Dict = () => {
           ...rowSelection,
           checkStrictly,
         }}
+        rowKey="id"
         tableData={tableData}
-        pagination={false}
-        Btn={<DictBtn selectData={selectData} />}
+        pagination={{
+          current: page.current,
+          pageSize: page.pageSize,
+          total: page.total,
+          onChange: pagiChange,
+          onShowSizeChange: sizeChange,
+          showSizeChanger: true,
+          showTotal: (total) => `共 ${page.total} 条`,
+        }}
+        Btn={props => <DictBtn ref={btnRef} selectData={selectData} getList={() => getList()} modalData={modalData}  {...props}  />}
       >
         <Form.Item label="字典名称" name="name">
           <Input placeholder="请输入字典名称" />
@@ -159,16 +173,7 @@ const Dict = () => {
           <Input placeholder="请输入字典编号" />
         </Form.Item>
       </Wrap>
-      <div style={{ display: "flex", "justify-content": "flex-end" }}>
-        <Pagination
-          total={page.total}
-          showSizeChanger
-          showQuickJumper
-          page={page.current}
-          pageSize={page.pageSize}
-          showTotal={(total) => `共 ${page.total} 条`}
-        ></Pagination>
-      </div>
+      
     </>
   );
 };

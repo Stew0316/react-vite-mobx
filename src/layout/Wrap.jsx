@@ -1,8 +1,10 @@
-import { Form, Button, Table } from "antd"
-import { useRef } from "react"
+import { Form, Button, Table, Pagination } from "antd"
+import { useRef, useEffect, useState } from "react"
 const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
   const formRef = useRef()
+  const [formVal, setFormVal] = useState({})
   const onFinish = (values) => {
+    setFormVal(values)
     getData(values)
   }
   // const data = [];
@@ -24,11 +26,12 @@ const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
           <Button htmlType="submit" type="primary" className='submit'>查询</Button>
         </Form.Item>
       </Form>
-      {Btn}
+      {typeof Btn === "function" ? Btn({ customParam: 'test', formVal: formVal }) : Btn}
       <div>
         <Table
           columns={columns}
           dataSource={tableData}
+          bordered={true}
           {...props}
           className=""
         />
