@@ -43,3 +43,11 @@ export function editItem(data) {
     data
   })
 }
+
+export function getList(params) {
+  return service({
+    method: 'get',
+    url: '/dict/page',
+    params
+  })
+}

@@ -1,13 +1,10 @@
 import { Form, Button, Table, Pagination } from "antd"
 import { useRef, useEffect, useState } from "react"
-const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
+const Wrap = ({children, getData,columns,tableData = [], Btn, rowKey='id', ...props}) => {
   const formRef = useRef()
-  const [formVal, setFormVal] = useState({})
   const onFinish = (values) => {
-    setFormVal(values)
     getData(values)
   }
-  // const data = [];
   const reset = () => {
     formRef.current.resetFields()
     getData()
@@ -26,12 +23,13 @@ const Wrap = ({children, getData,columns,tableData = [], Btn, ...props}) => {
           <Button htmlType="submit" type="primary" className='submit'>查询</Button>
         </Form.Item>
       </Form>
-      {typeof Btn === "function" ? Btn({ customParam: 'test', formVal: formVal }) : Btn}
+      {Btn}
       <div>
         <Table
           columns={columns}
           dataSource={tableData}
           bordered={true}
+          rowKey={rowKey}
           {...props}
           className=""
         />

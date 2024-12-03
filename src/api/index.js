@@ -82,7 +82,7 @@ service.interceptors.response.use(
     }
     if(response.data.code == 401) {
       localStorage.removeItem(LOCAL_ENV.VITE_MAIN_KEY+'-token')
-      history.replace(LOCAL_ENV.VITE_BASE_NAME+'/login')
+      history.replace(LOCAL_ENV.VITE_BASE_NAME+'/')
       return
     }
     if(response.data.code == 200) {

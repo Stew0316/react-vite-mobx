@@ -15,7 +15,6 @@ const Dict = () => {
   const [tableData, setTableData] = useState([]);
   const [checkStrictly, setCheckStrictly] = useState(false);
   const [selectData, setSelectData] = useState([]);
-  const [modalData, setModalData] = useState({});
   const btnRef = useRef();
   const [page, setPage] = useState({
     current: 1,
@@ -27,6 +26,7 @@ const Dict = () => {
       page: page.current,
       pageSize: page.pageSize,
       ...params,
+      parentId: -1
     }).then((res) => {
       setPage((prevPage) => ({
         ...prevPage,
@@ -41,21 +41,10 @@ const Dict = () => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       setSelectData(selectedRows);
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.hasChildren, // 禁用 `hasChildren` 为 `true` 的行
-    }),
-    onSelect: (record, selected, selectedRows) => {
-      console.log(record, selected, selectedRows);
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log(selected, selectedRows, changeRows);
-    },
+    // getCheckboxProps: (record) => ({
+    //   disabled: record.hasChildren, // 禁用 `hasChildren` 为 `true` 的行
+    // }),
   };
   const delData = (record) => {
     delConfirm().then(() => {
@@ -67,11 +56,13 @@ const Dict = () => {
   const editData = (record) => {
     btnRef.current.editModal(record);
   }
-  const pagiChange = (current, pageSize) => {
-    console.log(11,current, pageSize);
+  const configDict = (record) => {
+    btnRef.current.openConfig(record);
   };
-  const sizeChange = (current, size) => {
-    console.log(22,current, size);
+  const pagiChange = (current, pageSize) => {
+    page.current = current;
+    page.pageSize = pageSize;
+    getList();
   };
   const columns = [
     {
@@ -136,7 +127,7 @@ const Dict = () => {
           >
             删除
           </Button>
-          <Button icon={<DeleteOutlined />} type="link">
+          <Button icon={<DeleteOutlined />} type="link" onClick={() => configDict(record)}>
             字典配置
           </Button>
         </>
@@ -153,24 +144,23 @@ const Dict = () => {
           ...rowSelection,
           checkStrictly,
         }}
-        rowKey="id"
         tableData={tableData}
         pagination={{
           current: page.current,
           pageSize: page.pageSize,
           total: page.total,
           onChange: pagiChange,
-          onShowSizeChange: sizeChange,
           showSizeChanger: true,
           showTotal: (total) => `共 ${page.total} 条`,
         }}
-        Btn={props => <DictBtn ref={btnRef} selectData={selectData} getList={() => getList()} modalData={modalData}  {...props}  />}
+        Btn={<DictBtn ref={btnRef} selectData={selectData} getList={() => getList()}  />}
       >
-        <Form.Item label="字典名称" name="name">
-          <Input placeholder="请输入字典名称" />
-        </Form.Item>
+        
         <Form.Item label="字典编号" name="key">
           <Input placeholder="请输入字典编号" />
+        </Form.Item>
+        <Form.Item label="字典名称" name="name">
+          <Input placeholder="请输入字典名称" />
         </Form.Item>
       </Wrap>
       
