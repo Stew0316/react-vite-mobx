@@ -70,7 +70,23 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
       });
     });
   };
-
+  const configDel = () => {
+    if(configSelectData.length == 0) {
+      return message.open({
+        type: "error",
+        content: "请先选择一个字典",
+      });
+    }
+    delConfirm().then(() => {
+      delBatch(configSelectData.map((item) => item.id)).then((res) => {
+        message.open({
+          type: "success",
+          content: "删除成功",
+        });
+        getConfig()
+      });
+    });
+  }
 
   // config数据区
   const [configForm] = Form.useForm();
@@ -159,6 +175,17 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           <Button
             icon={<DeleteOutlined />}
             type="link"
+            onClick={() => {
+              delConfirm().then(() => {
+                delItem(record.id).then((res) => {
+                  message.open({
+                    type: "success",
+                    content: "删除成功",
+                  });
+                  getConfig()
+                });
+              });
+            }}
           >
             删除
           </Button>
@@ -249,6 +276,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
             icon={<DeleteOutlined />}
             type="primary"
             danger
+            onClick={configDel}
           >
             删除
           </Button>
@@ -262,7 +290,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           style={{ minHeight: '400px', height: '100%' }}
           rowSelection={{
             onChange: (selectedRowKeys, selectedRows) => {
-              configSelectData(selectedRows);
+              setConfigSelectData(selectedRows);
             },
           }}
         />
