@@ -17,11 +17,6 @@ const items = [
     icon: <BarChartOutlined />,
   },
   {
-    label: '表格表单',
-    key: '/home/business',
-    icon: <TableOutlined />,
-  },
-  {
     label: '权限管理',
     key: '/home/permission',
     icon: <LockOutlined />,
@@ -53,8 +48,8 @@ const items = [
         key: '/home/users',
       },
       {
-        label: '账号',
-        key: '/home/account',
+        label: '租户管理',
+        key: '/home/tenant',
       },
       {
         label: '字典',

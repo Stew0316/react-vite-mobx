@@ -24,6 +24,7 @@ import Account from "@/views/system/Account"
 import Dict from "@/views/system/Dict";
 import Users from '@/views/system/Users'
 import Map from "@/views/index/map";
+import Tenant from "@/views/system/Tenant";
 import Error404 from "@/views/error/404";
 import Error403 from "@/views/error/403";
 // const route = [
@@ -71,6 +72,7 @@ const route = createRoutesFromElements(
       <Route path="account" element={<Account />}></Route>
       <Route path="dict" element={<Dict />}></Route>
       <Route path="users" element={<Users />}></Route>
+      <Route path="tenant" element={<Tenant />}></Route>
     </Route>
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>
