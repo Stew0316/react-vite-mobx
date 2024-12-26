@@ -48,10 +48,6 @@ const items = [
         key: '/home/users',
       },
       {
-        label: '租户管理',
-        key: '/home/tenant',
-      },
-      {
         label: '字典',
         key: '/home/dict',
       },
