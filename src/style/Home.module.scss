@@ -1,0 +1,20 @@
+.Home {
+  height: 100vh;
+  :global {
+    .wrap {
+      height: calc(100vh - 60px);
+      display: flex;
+      .route {
+        flex: 1;
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+    .side {
+      width: 200px;
+    }
+    .header {
+      height: 60px;
+    }
+  }
+}

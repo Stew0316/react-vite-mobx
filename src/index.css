@@ -1,0 +1,43 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --theme-clor: #1890ff;
+}
+
+body {
+  margin: 0;
+  
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+button {
+  background-color: transparent;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  padding: 16px;
+}
+.base-form {
+  padding: 12px 0;
+  margin-bottom: 12px;
+}
+.base-form .reset {
+  margin-right: 8px;
+}
+.btns {
+  display: flex;
+  margin-bottom: 9px;
+}
+.btns .btn {
+  margin-right: 6px;
+}
+.dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
