@@ -1,4 +1,4 @@
-import { Button, Form, Input, Table, Select, Modal, Pagination } from "antd";
+
 import {
   DeleteOutlined,
   EditOutlined,
@@ -153,9 +153,9 @@ const Dict = () => {
           showSizeChanger: true,
           showTotal: (total) => `共 ${page.total} 条`,
         }}
-        Btn={<DictBtn ref={btnRef} selectData={selectData} getList={() => getList()}  />}
+        Btn={<DictBtn ref={btnRef} selectData={selectData} getList={() => getList()} />}
       >
-        
+
         <Form.Item label="字典编号" name="key">
           <Input placeholder="请输入字典编号" />
         </Form.Item>
@@ -163,7 +163,7 @@ const Dict = () => {
           <Input placeholder="请输入字典名称" />
         </Form.Item>
       </Wrap>
-      
+
     </>
   );
 };
