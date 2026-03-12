@@ -1,5 +1,6 @@
 import Wrap from "@/layout/Wrap";
 import { useState, useEffect } from "react";
+import { getPage } from "@/api/system/tenant";
 
 const Tenant = () => {
 
@@ -23,6 +24,13 @@ const Tenant = () => {
   ];
 
   const getList = (params = {}) => {
+    getPage({
+      page: page.current,
+      pageSize: page.pageSize,
+      ...params,
+    }).then((res) => {
+      console.log(res)
+    })
     // getParent({
     //   page: page.current,
     //   pageSize: page.pageSize,
