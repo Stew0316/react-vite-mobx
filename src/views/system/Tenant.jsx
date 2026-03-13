@@ -1,7 +1,12 @@
 import Wrap from "@/layout/Wrap";
 import { useState, useEffect } from "react";
 import { getPage } from "@/api/system/tenant";
-
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  ExclamationCircleFilled,
+} from "@ant-design/icons";
 const Tenant = () => {
 
   const [tableData, setTableData] = useState([]);
@@ -12,14 +17,41 @@ const Tenant = () => {
     total: 0,
   });
 
+  const [statusOptions, setStatusOptions] = useState([
+    { value: 1, label: '启用' },
+    { value: 0, label: '禁用' },
+  ])
+
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
     },
     {
-      title: "字典编号",
-      dataIndex: "key",
+      title: "租户名称",
+      dataIndex: "name",
+    },
+    {
+      title: "租户状态",
+      dataIndex: "status",
+    },
+    {
+      title: "操作",
+      dataIndex: "action",
+      render: (text, record, index) => (
+        <>
+          <Button icon={<EditOutlined />} type="link" onClick={() => editData(record)}>
+            编辑
+          </Button>
+          <Button
+            icon={<DeleteOutlined />}
+            type="link"
+            onClick={() => delData(record)}
+          >
+            删除
+          </Button>
+        </>
+      ),
     },
   ];
 
@@ -29,20 +61,12 @@ const Tenant = () => {
       pageSize: page.pageSize,
       ...params,
     }).then((res) => {
-      console.log(res)
+      setPage((prevPage) => ({
+        ...prevPage,
+        total: res.total,
+      }));
+      setTableData(res.records);
     })
-    // getParent({
-    //   page: page.current,
-    //   pageSize: page.pageSize,
-    //   ...params,
-    //   parentId: -1
-    // }).then((res) => {
-    //   setPage((prevPage) => ({
-    //     ...prevPage,
-    //     total: res.total, // 将 newCurrentValue 替换为你想要的新值
-    //   }));
-    //   // setTableData(res.records);
-    // });
   };
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -83,11 +107,15 @@ const Tenant = () => {
         }}
       >
 
-        <Form.Item label="字典编号" name="key">
-          <Input placeholder="请输入字典编号" />
+        <Form.Item label="租户名称" name="name">
+          <Input placeholder="请输入租户名称" />
         </Form.Item>
-        <Form.Item label="字典名称" name="name">
-          <Input placeholder="请输入字典名称" />
+        <Form.Item label="租户状态" name="租户状态">
+          <Select
+            placeholder="请选择租户状态"
+            style={{ width: 120 }}
+            options={statusOptions}
+          ></Select>
         </Form.Item>
       </Wrap>
 
