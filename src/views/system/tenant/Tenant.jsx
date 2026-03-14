@@ -1,26 +1,44 @@
 import Wrap from "@/layout/Wrap";
-import { useState, useEffect } from "react";
-import { getPage } from "@/api/system/tenant";
+import { useState } from "react";
+import { getPage, delItem } from "@/api/system/tenant";
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
-  ExclamationCircleFilled,
 } from "@ant-design/icons";
+import TenantBtn from "./TenantBtn";
+import useTable from "@/hooks/table";
+
 const Tenant = () => {
 
-  const [tableData, setTableData] = useState([]);
-  const [checkStrictly, setCheckStrictly] = useState(false);
-  const [page, setPage] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
+  const {
+    page,
+    btnRef,
+    tableData,
+    selectData,
+    checkStrictly,
+    pagiChange,
+    editData,
+    getList,
+    delData,
+    rowSelection
+  } = useTable({
+    listApi: getPage, delApi: delItem,
   });
 
   const [statusOptions, setStatusOptions] = useState([
-    { value: 1, label: '启用' },
-    { value: 0, label: '禁用' },
+    { value: 1, label: '启用', status: 'success', color: 'green' },
+    { value: 0, label: '禁用', status: 'error' },
   ])
+
+  const [statusMap, setStatusMap] = useState({
+    1: '启用',
+    0: '禁用',
+  })
+
+  const colorMap = {
+    1: 'green',
+    0: 'red',
+  }
 
   const columns = [
     {
@@ -34,6 +52,19 @@ const Tenant = () => {
     {
       title: "租户状态",
       dataIndex: "status",
+      render: (text, record) => {
+        return <Tag key={record.status} color={colorMap[record.status]}>
+          {statusMap[record.status]}
+        </Tag>
+      }
+    },
+    {
+      title: '联系方式',
+      dataIndex: 'contact',
+    },
+    {
+      title: '联系地址',
+      dataIndex: 'address',
     },
     {
       title: "操作",
@@ -47,6 +78,7 @@ const Tenant = () => {
             icon={<DeleteOutlined />}
             type="link"
             onClick={() => delData(record)}
+            danger
           >
             删除
           </Button>
@@ -54,37 +86,6 @@ const Tenant = () => {
       ),
     },
   ];
-
-  const getList = (params = {}) => {
-    getPage({
-      page: page.current,
-      pageSize: page.pageSize,
-      ...params,
-    }).then((res) => {
-      setPage((prevPage) => ({
-        ...prevPage,
-        total: res.total,
-      }));
-      setTableData(res.records);
-    })
-  };
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      // setSelectData(selectedRows);
-    },
-    // getCheckboxProps: (record) => ({
-    //   disabled: record.hasChildren, // 禁用 `hasChildren` 为 `true` 的行
-    // }),
-  };
-
-  const pagiChange = (current, pageSize) => {
-    page.current = current;
-    page.pageSize = pageSize;
-    getList();
-  };
-  useEffect(() => {
-    getList();
-  }, []);
 
   return (
     <>
@@ -105,12 +106,13 @@ const Tenant = () => {
           showSizeChanger: true,
           showTotal: (total) => `共 ${page.total} 条`,
         }}
+        Btn={<TenantBtn selectData={selectData} getList={getList} ref={btnRef}></TenantBtn>}
       >
 
         <Form.Item label="租户名称" name="name">
           <Input placeholder="请输入租户名称" />
         </Form.Item>
-        <Form.Item label="租户状态" name="租户状态">
+        <Form.Item label="租户状态" name="status">
           <Select
             placeholder="请选择租户状态"
             style={{ width: 120 }}

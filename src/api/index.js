@@ -6,7 +6,7 @@ import { createBrowserHistory } from "history";
 const service = axios.create({
   baseURL: LOCAL_ENV.VITE_API,
   headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    "Content-Type": "application/json;charset=utf-8",
   },
   timeout: 60000,
 });
@@ -23,7 +23,7 @@ service.interceptors.request.use(
     err.message = "服务器异常，请联系管理员！";
     // 错误抛到业务代码
     return Promise.reject(err);
-  }
+  },
 );
 
 service.interceptors.response.use(
@@ -56,7 +56,7 @@ service.interceptors.response.use(
     message.error(err.message || JSON.stringify(err));
     err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
     return Promise.reject(err);
-  }
+  },
 );
 
 export default service;

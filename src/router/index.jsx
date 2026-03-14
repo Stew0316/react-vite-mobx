@@ -21,10 +21,10 @@ import Business from "@/views/business/Business"
 import MenuSet from "@/views/system/MenuSet"
 import Role from "@/views/permission/Role"
 import Account from "@/views/system/Account"
-import Dict from "@/views/system/Dict";
+import Dict from "@/views/system/dict/Dict";
 import Users from '@/views/system/Users'
 import Map from "@/views/index/map";
-import Tenant from "@/views/system/Tenant";
+import Tenant from "@/views/system/tenant/Tenant";
 import Error404 from "@/views/error/404";
 import Error403 from "@/views/error/403";
 // const route = [
