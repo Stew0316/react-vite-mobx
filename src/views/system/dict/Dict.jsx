@@ -5,64 +5,39 @@ import {
   EyeOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Wrap from "@/layout/Wrap";
 import DictBtn from "./DictBtn";
-import { getParent, delItem } from "@/api/system/dict";
+import { getPage, delItem } from "@/api/system/dict";
 import dayjs from "dayjs";
-import { delConfirm } from "@/utils/feedBack";
+import useTable from "@/hooks/table";
+import { SOURCE_SYSTEM_MAP } from "@/constant/system";
+
+
 const Dict = () => {
-  const [tableData, setTableData] = useState([]);
-  const [checkStrictly, setCheckStrictly] = useState(false);
-  const [selectData, setSelectData] = useState([]);
-  const btnRef = useRef();
-  const [page, setPage] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
+
+  const {
+    page,
+    btnRef,
+    tableData,
+    selectData,
+    checkStrictly,
+    pagiChange,
+    editData,
+    getList,
+    delData,
+    rowSelection
+  } = useTable({
+    listApi: getPage, delApi: delItem,
   });
-  const getList = (params = {}) => {
-    getParent({
-      page: page.current,
-      pageSize: page.pageSize,
-      ...params,
-      parentId: -1
-    }).then((res) => {
-      setPage((prevPage) => ({
-        ...prevPage,
-        total: res.total, // 将 newCurrentValue 替换为你想要的新值
-      }));
-      setTableData(res.records);
-    });
-  };
-  useEffect(() => {
-    getList();
-  }, []);
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      setSelectData(selectedRows);
-    },
-    // getCheckboxProps: (record) => ({
-    //   disabled: record.hasChildren, // 禁用 `hasChildren` 为 `true` 的行
-    // }),
-  };
-  const delData = (record) => {
-    delConfirm().then(() => {
-      delItem(record.id).then(() => {
-        getList();
-      });
-    });
-  };
-  const editData = (record) => {
-    btnRef.current.editModal(record);
-  }
+
+  const [statusMap] = useState({
+    1: '启用',
+    0: '禁用',
+  })
+
   const configDict = (record) => {
     btnRef.current.openConfig(record);
-  };
-  const pagiChange = (current, pageSize) => {
-    page.current = current;
-    page.pageSize = pageSize;
-    getList();
   };
   const columns = [
     {
@@ -71,43 +46,49 @@ const Dict = () => {
     },
     {
       title: "字典编号",
-      dataIndex: "key",
+      dataIndex: "code",
     },
     {
       title: "字典名称",
       dataIndex: "name",
-      key: "id",
     },
     {
-      title: '父级字典编号',
-      dataIndex: 'code'
+      title: "来源系统",
+      dataIndex: "sourceSystem",
+      render: (text, record) => {
+        return SOURCE_SYSTEM_MAP[record.sourceSystem]
+      }
     },
     {
-      title: "字典排序",
-      dataIndex: "sort",
+      title: "外部平台字典名称",
+      dataIndex: "externalName",
     },
     {
-      title: "是否停用",
-      dataIndex: "isSealed",
-      render: (text, record, index) => {
-        return record.isSealed ? "是" : "否";
+      title: "外部平台字典编码",
+      dataIndex: "externalCode",
+    },
+    {
+      title: "状态",
+      dataIndex: "status",
+      render: (text, record) => {
+        return <Tag key={record.status} color={record.status == 1 ? 'green' : 'red'} >{statusMap[record.status]}</Tag>
       }
     },
     {
       title: "创建时间",
-      dataIndex: "createTime",
+      dataIndex: "createdTime",
       render: (text, record, index) => {
         return text
-          ? dayjs(record.createTime).format("YYYY-MM-DD HH:mm:ss")
+          ? dayjs(record.createdTime).format("YYYY-MM-DD HH:mm:ss")
           : "";
       },
     },
     {
       title: "修改时间",
-      dataIndex: "updateTime",
+      dataIndex: "updatedTime",
       render: (text, record, index) => {
         return text
-          ? dayjs(record.updateTime).format("YYYY-MM-DD HH:mm:ss")
+          ? dayjs(record.updatedTime).format("YYYY-MM-DD HH:mm:ss")
           : "";
       },
     },
@@ -120,16 +101,18 @@ const Dict = () => {
           <Button icon={<EditOutlined />} type="link" onClick={() => editData(record)}>
             编辑
           </Button>
+          <Button icon={<DeleteOutlined />} type="link" onClick={() => configDict(record)}>
+            字典配置
+          </Button>
           <Button
             icon={<DeleteOutlined />}
             type="link"
             onClick={() => delData(record)}
+            danger
           >
             删除
           </Button>
-          <Button icon={<DeleteOutlined />} type="link" onClick={() => configDict(record)}>
-            字典配置
-          </Button>
+
         </>
       ),
     },

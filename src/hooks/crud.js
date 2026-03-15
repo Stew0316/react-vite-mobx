@@ -99,6 +99,7 @@ const useCrud = ({
     add,
     handleCancel,
     handleOk,
+    setFormData,
   };
 };
 

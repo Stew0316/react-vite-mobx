@@ -1,84 +1,40 @@
-import { Button, message, Modal, Form, Input, InputNumber, Radio, Table, Row, Col  } from "antd";
+import { Button, message, Modal, Form, Input, InputNumber, Radio, Table, Row, Col } from "antd";
 import { delConfirm } from "@/utils/feedBack";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { getParent, delItem, delBatch, addItem, editItem, getList as getChild } from "@/api/system/dict";
+import { delItem, itemDel, addItem, editItem, itemPage as getChild } from "@/api/system/dict";
 import { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react";
+import useCrud from "@/hooks/crud";
+import { SOURCE_SYSTEM_OPTIONS, SOURCE_SYSTEM_DEFAULT } from "@/constant/system";
+
 const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [form] = Form.useForm();
+
+  const {
+    isEdit,
+    isModalOpen,
+    form,
+    allDel,
+    add,
+    handleCancel,
+    handleOk,
+    setFormData
+  } = useCrud({
+    selectData,
+    getList,
+    delApi: delItem,
+    addApi: addItem,
+    editApi: editItem,
+    ref
+  })
   const [childForm] = Form.useForm();
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      if (isEdit) {
-        // 编辑
-        setFormData(preValue => {
-          return {
-            ...preValue,
-            ...values
-          }
-        })
-        editItem({
-          id: formData.id,
-          ...values
-        }).then((res) => {
-          message.open({
-            type: "success",
-            content: "修改成功",
-          });
-          getList();
-          form.resetFields();
-          setIsModalOpen(false);
-        });
-      } else {
-        // 新增
-        addItem(values).then((res) => {
-          message.open({
-            type: "success",
-            content: "添加成功",
-          });
-          getList();
-          form.resetFields();
-          setIsModalOpen(false);
-        });
-      }
-      // 
-    });
-    
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const add = () => {
-    setIsModalOpen(true);
-    setIsEdit(false);
-  };
-  const allDel = () => {
-    if (selectData.length == 0)
-      return message.open({
-        type: "error",
-        content: "请先选择一个字典",
-      });
-    delConfirm().then(() => {
-      delBatch(selectData.map((item) => item.id)).then((res) => {
-        message.open({
-          type: "success",
-          content: "删除成功",
-        });
-        getList();
-      });
-    });
-  };
   const configDel = () => {
-    if(configSelectData.length == 0) {
+    if (configSelectData.length == 0) {
       return message.open({
         type: "error",
         content: "请先选择一个字典",
       });
     }
     delConfirm().then(() => {
-      delBatch(configSelectData.map((item) => item.id)).then((res) => {
+      itemDel(configSelectData.map((item) => item.id)).then((res) => {
         message.open({
           type: "success",
           content: "删除成功",
@@ -126,7 +82,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
       console.log(values, configData);
     });
   }
-  
+
   const reset = () => {
     configForm.resetFields();
     getConfig()
@@ -139,7 +95,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
     setConfigEdit(true);
     setConfigModalOpen(true);
     childForm.setFieldsValue(record);
-    
+
   }
   const columns = [
     {
@@ -194,21 +150,15 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
     }
   ]
   useEffect(() => {
-    if(configData.id) {
+    if (configData.id) {
       getConfig();
     }
   }, [configData])
   useImperativeHandle(ref, () => ({
-    editModal: (data) => {
-      setIsModalOpen(true);
-      setIsEdit(true);
-      setFormData(data);
-      form.setFieldsValue(data);
-    },
+    ...ref.current,
     openConfig: (data) => {
       setConfigData(data);
       setConfigOpen(true);
-      
     }
   }));
   return (
@@ -232,7 +182,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
         </Button>
       </div>
       <Modal
-        title={configData.name+"-字典配置"}
+        title={configData.name + "-字典配置"}
         open={configOpen}
         footer={null}
         onCancel={() => setConfigOpen(false)}
@@ -240,7 +190,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
       >
         <Form
           className="base-form"
-          labelCol={{span: 6}}
+          labelCol={{ span: 6 }}
           layout="inline"
           form={configForm}
           onFinish={searchConfig}
@@ -257,7 +207,13 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           >
             <Input placeholder="请输入字典名称" />
           </Form.Item>
-          
+          <Form.Item
+            label="字典名称"
+            name="name"
+          >
+            <Input placeholder="请输入字典名称" />
+          </Form.Item>
+
           <Form.Item >
             <Button className='reset' onClick={reset}>重置</Button>
             <Button htmlType="submit" type="primary" className='submit'>查询</Button>
@@ -296,7 +252,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
         />
       </Modal>
       <Modal
-        title={configEdit?"编辑":"新增"}
+        title={configEdit ? "编辑" : "新增"}
         open={configModalOpen}
         onCancel={() => {
           setConfigModalOpen(false);
@@ -307,7 +263,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
       >
         <Form
           className="base-form"
-          labelCol={{span: 8}}
+          labelCol={{ span: 8 }}
           layout="horizontal"
           form={childForm}
           initialValues={{
@@ -373,7 +329,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
                   },
                 ]}
               >
-                <InputNumber style={{width: '100%'}} min={1} placeholder="请输入字典排序" />
+                <InputNumber style={{ width: '100%' }} min={1} placeholder="请输入字典排序" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -397,7 +353,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
               <Form.Item
                 label="字典备注"
                 name="remark"
-                labelCol={{span: 4}}
+                labelCol={{ span: 4 }}
               >
                 <Input.TextArea placeholder="请输入字典备注" />
               </Form.Item>
@@ -406,7 +362,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
               <Form.Item
                 label="额外参数"
                 name="params"
-                labelCol={{span: 4}}
+                labelCol={{ span: 4 }}
               >
                 <Input.TextArea placeholder="请输入额外参数" />
               </Form.Item>
@@ -420,18 +376,18 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form 
+        <Form
           className="base-form"
-          labelCol={{span: 4}}
+          labelCol={{ span: 8 }}
           initialValues={{
-            sort: 1,
-            isSealed: 0
+            status: 1,
+            sourceSystem: SOURCE_SYSTEM_DEFAULT
           }}
           form={form}
         >
           <Form.Item
             label="字典编号"
-            name="key"
+            name="code"
             rules={[
               {
                 required: true,
@@ -455,42 +411,48 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           >
             <Input placeholder="请输入字典名称" />
           </Form.Item>
-          
           <Form.Item
-            label="字典排序"
-            name="sort"
-            rules={[
-              {
-                required: true,
-                message: "请输入字典排序",
-                
-              },
-            ]}
+            label="外部平台字典类型编码"
+            name="externalCode"
           >
-            <InputNumber min={1} placeholder="请输入字典排序" style={{
-              width: '100%'
-            }} />
+            <Input placeholder="请输入外部平台字典类型编码" />
           </Form.Item>
           <Form.Item
-            label="是否停用"
-            name="isSealed"
+            label="外部平台字典类型名称"
+            name="externalName"
+          >
+            <Input placeholder="请输入外部平台字典类型名称" />
+          </Form.Item>
+          <Form.Item
+            label="是否启用"
+            name="status"
             rules={[
               {
                 required: true,
-                message: "请选择是否停用",
+                message: "请选择是否启用",
               },
             ]}
           >
             <Radio.Group>
-              <Radio value={true}>是</Radio>
-              <Radio value={false}>否</Radio>
+              <Radio value={1}>是</Radio>
+              <Radio value={0}>否</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="额外参数"
-            name="params"
+            label="来源"
+            name="sourceSystem"
+            rules={[
+              {
+                required: true,
+                message: "请选择来源",
+              },
+            ]}
           >
-            <Input.TextArea placeholder="请输入额外参数，为一些意外情况添加" />
+            <Select
+              placeholder="请选择租户状态"
+              style={{ width: 120 }}
+              options={SOURCE_SYSTEM_OPTIONS}
+            ></Select>
           </Form.Item>
           <Form.Item
             label="备注"

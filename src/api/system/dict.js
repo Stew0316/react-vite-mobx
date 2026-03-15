@@ -1,53 +1,77 @@
-import service from ".."
+import service from "..";
 
-export function getParent(params) {
+export function getPage(params) {
   return service({
-    method: 'get',
-    url: '/dict/parent-page',
-    params
-  })
+    method: "get",
+    url: "/dict/type/list",
+    params,
+  });
 }
 
-export function delItem(id) {
+export function delItem(ids) {
   return service({
-    method: 'post',
-    url: '/dict/delete',
+    method: "post",
+    url: "/dict/type/delete",
     data: {
-      id
-    }
-  })
-}
-
-export function delBatch(ids) {
-  return service({
-    method: 'post',
-    url: '/dict/delete-batch',
-    data: {
-      ids
-    }
-  })
+      ids,
+    },
+  });
 }
 
 export function addItem(data) {
   return service({
-    method: 'post',
-    url: '/dict/add',
-    data
-  })
+    method: "post",
+    url: "/dict/type/add",
+    data,
+  });
 }
 
 export function editItem(data) {
   return service({
-    method: 'post',
-    url: '/dict/update',
-    data
-  })
+    method: "post",
+    url: "/dict/type/update",
+    data,
+  });
 }
 
-export function getList(params) {
+export function itemPage(params) {
   return service({
-    method: 'get',
-    url: '/dict/page',
-    params
-  })
+    method: "get",
+    url: "/dict/item/list",
+    params,
+  });
+}
+
+export function itemDel(id) {
+  return service({
+    method: "post",
+    url: "/dict/item/delete",
+    data: {
+      id,
+    },
+  });
+}
+
+export function itemAdd(data) {
+  return service({
+    method: "post",
+    url: "/dict/item/add",
+    data,
+  });
+}
+
+export function itemEdit(data) {
+  return service({
+    method: "post",
+    url: "/dict/item/update",
+    data,
+  });
+}
+
+export function getDictAll() {
+  return service({
+    method: "post",
+    url: "/dict/type/all",
+    data,
+  });
 }
