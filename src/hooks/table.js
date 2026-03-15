@@ -69,6 +69,7 @@ const useTable = ({ listApi, delApi, autoRequest = true }) => {
     pagiChange,
     getList,
     page,
+    setTableData,
   };
 };
 

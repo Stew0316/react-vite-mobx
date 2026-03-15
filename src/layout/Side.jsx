@@ -1,10 +1,10 @@
 import Style from '@/style/Side.module.scss'
 import { Menu } from 'antd';
-import { useState } from 'react';
-import { BarChartOutlined, AppstoreOutlined, TableOutlined, LockOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { BarChartOutlined, AppstoreOutlined, LockOutlined } from '@ant-design/icons';
 import { ICON_CODE } from '@/common/IconFont'
-import { useLocation, useMatch, useNavigate  } from 'react-router';
-//这里的key取路径的最后一部分/home/index取index，/home/index/test取test，方便刷新取location重新赋值
+import { useLocation, useNavigate } from 'react-router';
+
 const items = [
   {
     label: '首页',
@@ -38,6 +38,7 @@ const items = [
   {
     icon: <AppstoreOutlined />,
     label: '系统管理',
+    key: '/home/system',
     children: [
       {
         label: '菜单',
@@ -53,75 +54,62 @@ const items = [
       },
     ]
   }
-  // {
-  //   label: 'Navigation Three - Submenu',
-  //   key: 'SubMenu',
-  //   icon: <SettingOutlined />,
-  //   children: [
-  //     {
-  //       type: 'group',
-  //       label: 'Item 1',
-  //       children: [
-  //         {
-  //           label: 'Option 1',
-  //           key: 'setting:1',
-  //         },
-  //         {
-  //           label: 'Option 2',
-  //           key: 'setting:2',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       type: 'group',
-  //       label: 'Item 2',
-  //       children: [
-  //         {
-  //           label: 'Option 3',
-  //           key: 'setting:3',
-  //         },
-  //         {
-  //           label: 'Option 4',
-  //           key: 'setting:4',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: (
-  //     <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-  //       Navigation Four - Link
-  //     </a>
-  //   ),
-  //   key: 'alipay',
-  // },
 ]
 
+const getParentKeys = (menuItems, targetKey, parentKeys = []) => {
+  for (const item of menuItems) {
+    if (item.key === targetKey) {
+      return parentKeys;
+    }
+
+    if (item.children) {
+      const matchedParentKeys = getParentKeys(item.children, targetKey, [...parentKeys, item.key]);
+
+      if (matchedParentKeys.length) {
+        return matchedParentKeys;
+      }
+    }
+  }
+
+  return [];
+}
+
 function Side(props) {
-  
   const locate = useLocation()
   const navi = useNavigate()
-  const mat = useMatch(locate.pathname)
-  const [current, setCurrent] = useState(mat.pathname);
+  const [current, setCurrent] = useState(locate.pathname);
+  const [openKeys, setOpenKeys] = useState(getParentKeys(items, locate.pathname));
+
+  useEffect(() => {
+    setCurrent(locate.pathname)
+    setOpenKeys(getParentKeys(items, locate.pathname))
+  }, [locate.pathname])
+
   const onClick = (e) => {
     setCurrent(e.key);
-    if(e.key) {
+    if (e.key) {
       navi(e.key)
     }
   };
+
+  const onOpenChange = (keys) => {
+    setOpenKeys(keys)
+  }
+
   return (
     <div className={`${props.className} ${Style.sidebar}`}>
-      <Menu 
+      <Menu
         className='menus'
         style={{
           width: '100%',
           height: '100%',
         }}
-        onClick={onClick} 
-        selectedKeys={[current]} 
-        mode="inline" 
-        items={items} 
+        onClick={onClick}
+        onOpenChange={onOpenChange}
+        openKeys={openKeys}
+        selectedKeys={[current]}
+        mode="inline"
+        items={items}
       />
     </div>
   )

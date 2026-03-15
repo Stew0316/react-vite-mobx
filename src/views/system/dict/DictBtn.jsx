@@ -4,7 +4,9 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { delItem, itemDel, addItem, editItem, itemPage as getChild } from "@/api/system/dict";
 import { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react";
 import useCrud from "@/hooks/crud";
+import useTable from "@/hooks/table";
 import { SOURCE_SYSTEM_OPTIONS, SOURCE_SYSTEM_DEFAULT } from "@/constant/system";
+import DictConfigBtn from "./DictConfigBtn";
 
 const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
 
@@ -44,11 +46,26 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
     });
   }
 
+  const {
+    page,
+    btnRef,
+    tableData,
+    setTableData,
+    // selectData,
+    checkStrictly,
+    pagiChange,
+    editData,
+    // getList,
+    delData,
+    rowSelection
+  } = useTable({
+    listApi: getChild, delApi: delItem,
+  });
+
+  const [configData, setConfigData] = useState({});
   // config数据区
   const [configForm] = Form.useForm();
   const [configOpen, setConfigOpen] = useState(false);
-  const [configData, setConfigData] = useState({});
-  const [tableData, setTableData] = useState([]);
   const [configSelectData, setConfigSelectData] = useState([]);
   const [configEdit, setConfigEdit] = useState(false);
   const [configModalOpen, setConfigModalOpen] = useState(false);
@@ -181,195 +198,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           删除
         </Button>
       </div>
-      <Modal
-        title={configData.name + "-字典配置"}
-        open={configOpen}
-        footer={null}
-        onCancel={() => setConfigOpen(false)}
-        width={1000}
-      >
-        <Form
-          className="base-form"
-          labelCol={{ span: 6 }}
-          layout="inline"
-          form={configForm}
-          onFinish={searchConfig}
-        >
-          <Form.Item
-            label="字典编号"
-            name="key"
-          >
-            <Input placeholder="请输入字典编号" />
-          </Form.Item>
-          <Form.Item
-            label="字典名称"
-            name="name"
-          >
-            <Input placeholder="请输入字典名称" />
-          </Form.Item>
-          <Form.Item
-            label="字典名称"
-            name="name"
-          >
-            <Input placeholder="请输入字典名称" />
-          </Form.Item>
-
-          <Form.Item >
-            <Button className='reset' onClick={reset}>重置</Button>
-            <Button htmlType="submit" type="primary" className='submit'>查询</Button>
-          </Form.Item>
-        </Form>
-        <div style={{ marginBottom: "12px" }}>
-          <Button
-            icon={<PlusOutlined />}
-            style={{ marginRight: "8px" }}
-            type="primary"
-            onClick={configAdd}
-          >
-            新增
-          </Button>
-          <Button
-            icon={<DeleteOutlined />}
-            type="primary"
-            danger
-            onClick={configDel}
-          >
-            删除
-          </Button>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={tableData}
-          bordered={true}
-          rowKey="id"
-          pagination={false}
-          style={{ minHeight: '400px', height: '100%' }}
-          rowSelection={{
-            onChange: (selectedRowKeys, selectedRows) => {
-              setConfigSelectData(selectedRows);
-            },
-          }}
-        />
-      </Modal>
-      <Modal
-        title={configEdit ? "编辑" : "新增"}
-        open={configModalOpen}
-        onCancel={() => {
-          setConfigModalOpen(false);
-          childForm.resetFields();
-        }}
-        width={800}
-        onOk={configConfirm}
-      >
-        <Form
-          className="base-form"
-          labelCol={{ span: 8 }}
-          layout="horizontal"
-          form={childForm}
-          initialValues={{
-            code: configData.key,
-            sort: 1,
-            isSealed: false
-          }}
-        >
-          <Row gutter={[0, 0]}>
-            <Col span={12}>
-              <Form.Item
-                label="父级字典编号"
-                name="code"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入父级字典编号",
-                    max: 50,
-                  },
-                ]}
-              >
-                <Input disabled placeholder="请输入父级字典编号" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="字典编号"
-                name="key"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入字典编号",
-                    max: 50,
-                  },
-                ]}
-              >
-                <Input placeholder="请输入字典编号" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="字典名称"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入字典名称",
-                  },
-                  { max: 50, message: "最多50个字符" },
-                ]}
-              >
-                <Input placeholder="请输入字典名称" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="字典排序"
-                name="sort"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入字典排序",
-                  },
-                ]}
-              >
-                <InputNumber style={{ width: '100%' }} min={1} placeholder="请输入字典排序" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="是否封存"
-                name="isSealed"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入字典排序",
-                  },
-                ]}
-              >
-                <Radio.Group>
-                  <Radio value={true}>是</Radio>
-                  <Radio value={false}>否</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-            <Col span={24}>
-              <Form.Item
-                label="字典备注"
-                name="remark"
-                labelCol={{ span: 4 }}
-              >
-                <Input.TextArea placeholder="请输入字典备注" />
-              </Form.Item>
-            </Col>
-            <Col span={24}>
-              <Form.Item
-                label="额外参数"
-                name="params"
-                labelCol={{ span: 4 }}
-              >
-                <Input.TextArea placeholder="请输入额外参数" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
+      <DictConfigBtn configData={configData}></DictConfigBtn>
       <Modal
         title={isEdit ? "编辑" : "新增"}
         open={isModalOpen}

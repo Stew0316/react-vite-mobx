@@ -72,6 +72,6 @@ export function getDictAll() {
   return service({
     method: "post",
     url: "/dict/type/all",
-    data,
+    data: { tenantId: 6 },
   });
 }

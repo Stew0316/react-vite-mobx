@@ -95,7 +95,7 @@ const Dict = () => {
     {
       title: "操作",
       dataIndex: "address",
-      width: 380,
+      width: 340,
       render: (text, record, index) => (
         <>
           <Button icon={<EditOutlined />} type="link" onClick={() => editData(record)}>
