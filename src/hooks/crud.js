@@ -100,6 +100,7 @@ const useCrud = ({
     handleCancel,
     handleOk,
     setFormData,
+    setIsModalOpen,
   };
 };
 

@@ -4,9 +4,7 @@ import { itemDel, itemAdd, itemEdit, itemPage as getChild } from "@/api/system/d
 import { forwardRef } from "react";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
-const DictConfigBtn = ({ configData, ...props }) => {
-
-
+const DictConfigBtn = ({ configData, getList: _getList, ...props }) => {
 
   const {
     page,
@@ -37,8 +35,10 @@ const DictConfigBtn = ({ configData, ...props }) => {
     delApi: itemDel,
     addApi: itemAdd,
     editApi: itemEdit,
-    ref
+    ref: btnRef
   })
+
+
 
   return (
     <>
@@ -53,8 +53,8 @@ const DictConfigBtn = ({ configData, ...props }) => {
           className="base-form"
           labelCol={{ span: 6 }}
           layout="inline"
-          form={configForm}
-          onFinish={searchConfig}
+          form={form}
+          onFinish={_getList}
         >
           <Form.Item
             label="字典编号"
@@ -76,7 +76,7 @@ const DictConfigBtn = ({ configData, ...props }) => {
           </Form.Item>
 
           <Form.Item >
-            <Button className='reset' onClick={reset}>重置</Button>
+            {/* <Button className='reset' onClick={reset}>重置</Button> */}
             <Button htmlType="submit" type="primary" className='submit'>查询</Button>
           </Form.Item>
         </Form>
@@ -112,7 +112,7 @@ const DictConfigBtn = ({ configData, ...props }) => {
           }}
         />
       </Modal>
-      <Modal
+      {/* <Modal
         title={configEdit ? "编辑" : "新增"}
         open={configModalOpen}
         onCancel={() => {
@@ -230,7 +230,7 @@ const DictConfigBtn = ({ configData, ...props }) => {
             </Col>
           </Row>
         </Form>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

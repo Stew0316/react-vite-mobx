@@ -7,6 +7,7 @@ const useTable = ({ listApi, delApi, autoRequest = true }) => {
   const [checkStrictly, setCheckStrictly] = useState(false);
   const [selectData, setSelectData] = useState([]);
   const btnRef = useRef();
+  const formRef = useRef();
 
   const [page, setPage] = useState({
     current: 1,
@@ -58,6 +59,11 @@ const useTable = ({ listApi, delApi, autoRequest = true }) => {
     btnRef.current.editModal(record);
   };
 
+  const reset = () => {
+    formRef.current.resetFields();
+    getList();
+  };
+
   return {
     tableData,
     checkStrictly,
@@ -70,6 +76,8 @@ const useTable = ({ listApi, delApi, autoRequest = true }) => {
     getList,
     page,
     setTableData,
+    formRef,
+    reset,
   };
 };
 

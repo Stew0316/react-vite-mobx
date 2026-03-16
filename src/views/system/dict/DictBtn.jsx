@@ -1,12 +1,12 @@
 import { Button, message, Modal, Form, Input, InputNumber, Radio, Table, Row, Col } from "antd";
-import { delConfirm } from "@/utils/feedBack";
+
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { delItem, itemDel, addItem, editItem, itemPage as getChild } from "@/api/system/dict";
 import { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react";
 import useCrud from "@/hooks/crud";
 import useTable from "@/hooks/table";
 import { SOURCE_SYSTEM_OPTIONS, SOURCE_SYSTEM_DEFAULT } from "@/constant/system";
-import DictConfigBtn from "./DictConfigBtn";
+import DictConfigDIalog from "./DictConfigDialog";
 
 const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
 
@@ -26,156 +26,17 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
     addApi: addItem,
     editApi: editItem,
     ref
-  })
-  const [childForm] = Form.useForm();
-  const configDel = () => {
-    if (configSelectData.length == 0) {
-      return message.open({
-        type: "error",
-        content: "请先选择一个字典",
-      });
-    }
-    delConfirm().then(() => {
-      itemDel(configSelectData.map((item) => item.id)).then((res) => {
-        message.open({
-          type: "success",
-          content: "删除成功",
-        });
-        getConfig()
-      });
-    });
-  }
-
-  const {
-    page,
-    btnRef,
-    tableData,
-    setTableData,
-    // selectData,
-    checkStrictly,
-    pagiChange,
-    editData,
-    // getList,
-    delData,
-    rowSelection
-  } = useTable({
-    listApi: getChild, delApi: delItem,
   });
 
+  const dialogRef = useRef();
+
   const [configData, setConfigData] = useState({});
-  // config数据区
-  const [configForm] = Form.useForm();
-  const [configOpen, setConfigOpen] = useState(false);
-  const [configSelectData, setConfigSelectData] = useState([]);
-  const [configEdit, setConfigEdit] = useState(false);
-  const [configModalOpen, setConfigModalOpen] = useState(false);
-  const getConfig = () => {
-    getChild({
-      parentId: configData.id,
-      ...configForm.getFieldsValue()
-    }).then((res) => {
-      setTableData(res.records);
-    })
-  }
-  const configAdd = () => {
-    setConfigEdit(false);
-    setConfigModalOpen(true);
-  };
-  const configConfirm = () => {
-    childForm.validateFields().then((values) => {
-      const data = {
-        ...values,
-        parentId: configData.id,
-      }
-      addItem(data).then((res) => {
-        message.open({
-          type: "success",
-          content: "添加成功",
-        });
-        getConfig();
-        childForm.resetFields();
-        setConfigModalOpen(false);
-      });
-      console.log(values, configData);
-    });
-  }
 
-  const reset = () => {
-    configForm.resetFields();
-    getConfig()
-  };
-  const searchConfig = values => {
-    getConfig()
-  }
-  const configEditOp = (record) => {
-    console.log(record);
-    setConfigEdit(true);
-    setConfigModalOpen(true);
-    childForm.setFieldsValue(record);
-
-  }
-  const columns = [
-    {
-      title: '父级字典编号',
-      code: 'code',
-      render: () => (
-        <>{configData.key}</>
-      )
-    },
-    {
-      title: "字典名称",
-      dataIndex: "name",
-    },
-    {
-      title: "字典编号",
-      dataIndex: "key",
-    },
-    {
-      title: "是否封存",
-      dataIndex: "isSealed",
-      render: (_, record) => {
-        return record.isSealed == 0 ? "否" : "是";
-      },
-    },
-    {
-      title: "操作",
-      width: '200px',
-      render: (text, record, index) => (
-        <>
-          <Button icon={<EditOutlined />} type="link" onClick={() => configEditOp(record)}>
-            编辑
-          </Button>
-          <Button
-            icon={<DeleteOutlined />}
-            type="link"
-            onClick={() => {
-              delConfirm().then(() => {
-                delItem(record.id).then((res) => {
-                  message.open({
-                    type: "success",
-                    content: "删除成功",
-                  });
-                  getConfig()
-                });
-              });
-            }}
-          >
-            删除
-          </Button>
-        </>
-      ),
-    }
-  ]
-  useEffect(() => {
-    if (configData.id) {
-      getConfig();
-    }
-  }, [configData])
   useImperativeHandle(ref, () => ({
     ...ref.current,
     openConfig: (data) => {
-      setConfigData(data);
-      setConfigOpen(true);
+      setConfigData(data)
+      dialogRef.current?.openDialog()
     }
   }));
   return (
@@ -198,7 +59,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
           删除
         </Button>
       </div>
-      <DictConfigBtn configData={configData}></DictConfigBtn>
+      <DictConfigDIalog ref={dialogRef} configData={configData}></DictConfigDIalog>
       <Modal
         title={isEdit ? "编辑" : "新增"}
         open={isModalOpen}
