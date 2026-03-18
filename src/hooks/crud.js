@@ -94,6 +94,7 @@ const useCrud = ({
   return {
     allDel,
     isEdit,
+    setIsEdit,
     isModalOpen,
     form,
     add,

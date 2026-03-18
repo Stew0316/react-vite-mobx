@@ -36,7 +36,7 @@ const DictBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
     ...ref.current,
     openConfig: (data) => {
       setConfigData(data)
-      dialogRef.current?.openDialog()
+      dialogRef.current?.openDialog(data.id)
     }
   }));
   return (

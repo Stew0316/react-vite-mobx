@@ -42,12 +42,12 @@ export function itemPage(params) {
   });
 }
 
-export function itemDel(id) {
+export function itemDel(ids) {
   return service({
     method: "post",
     url: "/dict/item/delete",
     data: {
-      id,
+      ids,
     },
   });
 }
