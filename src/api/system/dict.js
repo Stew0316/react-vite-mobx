@@ -22,7 +22,7 @@ export function addItem(data) {
   return service({
     method: "post",
     url: "/dict/type/add",
-    data,
+    data: { ...data, tenantId: 6 },
   });
 }
 
@@ -30,7 +30,7 @@ export function editItem(data) {
   return service({
     method: "post",
     url: "/dict/type/update",
-    data,
+    data: { ...data, tenantId: 6 },
   });
 }
 

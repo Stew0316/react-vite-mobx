@@ -35,6 +35,7 @@ const useCrud = ({
 
   const handleOk = () => {
     form.validateFields().then((values) => {
+      console.log("handleOk", values);
       if (isEdit) {
         // 编辑
         setFormData((preValue) => {
