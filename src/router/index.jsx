@@ -74,6 +74,7 @@ const route = createRoutesFromElements(
       <Route path="role" element={<Role />}></Route>
       <Route path="account" element={<Account />}></Route>
       <Route path="dict" element={<Dict />}></Route>
+      <Route path="dictGlobal" element={<Dict isGlobal />}></Route>
       <Route path="users" element={<Users />}></Route>
       <Route path="tenant" element={<Tenant />}></Route>
     </Route>

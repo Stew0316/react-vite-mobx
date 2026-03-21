@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import useCrudTable from "@/hooks/useCrudTable";
 import { SOURCE_SYSTEM_MAP } from "@/constant/system";
 
-const Dict = () => {
+const Dict = ({ isGlobal = false }) => {
   const btnRef = useRef();
 
   const {
@@ -18,12 +18,12 @@ const Dict = () => {
     pagiChange,
     getList,
     delData,
-    openEdit, // 编辑时调用 btnRef.current.editModal
+    openEdit,
   } = useCrudTable({
     listApi: getPage,
     delApi: delItem,
-    // 这个页面的新增/编辑弹窗在 DictBtn 里，
-    // 所以不传 addApi / editApi，openEdit 直接走 ref 通知子组件
+    // isGlobal 作为固定参数注入，初始请求和后续查询都会带上
+    defaultParams: { isGlobal },
     openEditOverride: (record) => btnRef.current?.editModal(record),
   });
 
@@ -102,6 +102,7 @@ const Dict = () => {
       columns={columns}
       rowSelection={rowSelection}
       tableData={tableData}
+      defaultParams={{ isGlobal }}
       pagination={{
         current: page.current,
         pageSize: page.pageSize,
@@ -113,12 +114,13 @@ const Dict = () => {
       Btn={
         <DictBtn
           ref={btnRef}
+          isGlobal={isGlobal}
           selectData={selectData}
-          getList={() => getList()}
+          getList={() => getList({ isGlobal })}
         />
       }
     >
-      <Form.Item label="字典编号" name="key">
+      <Form.Item label="字典编号" name="code">
         <Input placeholder="请输入字典编号" />
       </Form.Item>
       <Form.Item label="字典名称" name="name">

@@ -16,6 +16,7 @@ import { delConfirm } from "@/utils/feedBack";
  * @param {Function}[options.onSuccess]         增删改成功后的额外回调（如通知父组件刷新）
  * @param {Array}   [options.externalSelectData] 从外部注入的已选数据（父组件控制选中的场景）
  * @param {Function}[options.openEditOverride]  覆盖默认的 openEdit（表格和弹窗不在同一组件时）
+ * @param {object}  [options.defaultParams={}]  固定查询参数，每次请求（含翻页、重置）都会带上
  */
 const useCrudTable = ({
   listApi,
@@ -25,6 +26,7 @@ const useCrudTable = ({
   editKey = "id",
   autoRequest = true,
   defaultPage = { current: 1, pageSize: 10 },
+  defaultParams = {},
   ref,
   onSuccess,
   externalSelectData,
@@ -60,6 +62,7 @@ const useCrudTable = ({
     listApi({
       page: page.current,
       pageSize: page.pageSize,
+      ...defaultParams,
       ...params,
     }).then((res) => {
       setPage((prev) => ({ ...prev, total: res.total }));
@@ -69,12 +72,16 @@ const useCrudTable = ({
 
   const pagiChange = (current, pageSize) => {
     setPage((prev) => ({ ...prev, current, pageSize }));
-    getList({ page: current, pageSize });
+    getList({ page: current, pageSize, ...defaultParams });
   };
 
   const reset = () => {
     formRef.current?.resetFields();
-    getList({ page: defaultPage.current, pageSize: defaultPage.pageSize });
+    getList({
+      page: defaultPage.current,
+      pageSize: defaultPage.pageSize,
+      ...defaultParams,
+    });
   };
 
   // ─── 选择 ────────────────────────────────────────────────────────────────────
@@ -90,7 +97,7 @@ const useCrudTable = ({
       delApi([record[editKey]]).then(() => {
         message.success("删除成功");
         onSuccess?.();
-        getList();
+        getList({ ...defaultParams });
       });
     });
   };
@@ -105,7 +112,7 @@ const useCrudTable = ({
         message.success("删除成功");
         setInternalSelectData([]);
         onSuccess?.();
-        getList();
+        getList({ ...defaultParams });
       });
     });
   };
@@ -149,7 +156,7 @@ const useCrudTable = ({
         form.resetFields();
         setIsModalOpen(false);
         onSuccess?.();
-        getList();
+        getList({ ...defaultParams });
       });
     });
   };

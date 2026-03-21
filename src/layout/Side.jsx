@@ -52,6 +52,10 @@ const items = [
         label: '字典',
         key: '/home/dict',
       },
+      {
+        label: '全局字典',
+        key: '/home/dictGlobal',
+      },
     ]
   }
 ]

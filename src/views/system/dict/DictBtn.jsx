@@ -6,10 +6,9 @@ import useCrudTable from "@/hooks/useCrudTable";
 import { SOURCE_SYSTEM_OPTIONS, SOURCE_SYSTEM_DEFAULT } from "@/constant/system";
 import DictConfigDialog from "./DictConfigDialog";
 
-const DictBtn = forwardRef(({ selectData, getList }, ref) => {
+const DictBtn = forwardRef(({ selectData, getList, isGlobal = false }, ref) => {
   const dialogRef = useRef();
   const [configData, setConfigData] = useState({});
-
   const {
     isEdit,
     isModalOpen,
@@ -22,8 +21,8 @@ const DictBtn = forwardRef(({ selectData, getList }, ref) => {
   } = useCrudTable({
     listApi: () => Promise.resolve({ records: [], total: 0 }),
     delApi: delItem,
-    addApi: addItem,
-    editApi: editItem,
+    addApi: (data) => addItem({ ...data, isGlobal }),
+    editApi: (data) => editItem({ ...data, isGlobal }),
     autoRequest: false,
     onSuccess: getList,
     externalSelectData: selectData,
@@ -62,6 +61,11 @@ const DictBtn = forwardRef(({ selectData, getList }, ref) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
+        {isGlobal && (
+          <div style={{ marginBottom: 12, padding: "6px 12px", background: "var(--ant-color-warning-bg, #fffbe6)", border: "1px solid var(--ant-color-warning-border, #ffe58f)", borderRadius: 6, fontSize: 13, color: "var(--ant-color-warning, #faad14)" }}>
+            当前正在编辑全局字典，修改将对所有租户生效
+          </div>
+        )}
         <Form
           className="base-form"
           labelCol={{ span: 8 }}

@@ -1,97 +1,84 @@
 import { forwardRef, useImperativeHandle } from "react";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { message } from 'antd';
-import { delConfirm } from "@/utils/feedBack";
-import { delItem, editItem, addItem } from "@/api/system/tenant";
+import { Button, Modal, Form, Input, Select } from "antd";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { delItem, addItem, editItem } from "@/api/system/tenant";
+import useCrudTable from "@/hooks/useCrudTable";
 
-import useCrud from "@/hooks/crud";
+const statusOptions = [
+  { value: 1, label: "启用" },
+  { value: 0, label: "禁用" },
+];
 
-const TenantBtn = forwardRef(({ selectData, getList, ...props }, ref) => {
-
+const TenantBtn = forwardRef(({ selectData, getList }, ref) => {
   const {
     isEdit,
     isModalOpen,
     form,
-    allDel,
-    add,
+    openAdd,
+    openEditModal,
     handleCancel,
     handleOk,
-  } = useCrud({
-    selectData,
-    getList,
+    batchDel,
+  } = useCrudTable({
+    listApi: () => Promise.resolve({ records: [], total: 0 }),
     delApi: delItem,
     addApi: addItem,
     editApi: editItem,
-    ref
-  })
+    autoRequest: false,
+    onSuccess: getList,
+    externalSelectData: selectData,
+  });
 
-  const [statusOptions, setStatusOptions] = useState([
-    { value: 1, label: '启用', status: 'success', color: 'green' },
-    { value: 0, label: '禁用', status: 'error' },
-  ])
+  useImperativeHandle(ref, () => ({
+    editModal: openEditModal,
+  }));
 
   return (
     <>
       <div className="btns">
-        <Button className="btn" type="primary" icon={<PlusOutlined />} onClick={add}>新增</Button>
-        <Button type="primary" danger icon={<DeleteOutlined />} onClick={allDel}>删除</Button>
+        <Button className="btn" type="primary" icon={<PlusOutlined />} onClick={openAdd}>
+          新增
+        </Button>
+        <Button type="primary" danger icon={<DeleteOutlined />} onClick={batchDel}>
+          删除
+        </Button>
       </div>
+
       <Modal
         title={isEdit ? "编辑" : "新增"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form
-          className="base-form"
-          labelCol={{ span: 4 }}
-          form={form}
-        >
+        <Form className="base-form" labelCol={{ span: 4 }} form={form}>
           <Form.Item
             label="租户名称"
             name="name"
-            rules={[
-              {
-                required: true,
-                message: "请输入租户名称",
-                max: 50,
-              },
-            ]}
+            rules={[{ required: true, message: "请输入租户名称", max: 50 }]}
           >
             <Input placeholder="请输入租户名称" />
           </Form.Item>
-          <Form.Item
-            label="联系地址"
-            name="address"
-          >
+          <Form.Item label="联系地址" name="address">
             <Input placeholder="请输入联系地址" />
           </Form.Item>
-          <Form.Item
-            label="联系方式"
-            name="contact"
-          >
+          <Form.Item label="联系方式" name="contact">
             <Input placeholder="请输入联系方式" />
           </Form.Item>
           <Form.Item
             label="租户状态"
             name="status"
-            rules={[
-              {
-                required: true,
-                message: "请选择租户状态",
-              },
-            ]}
+            rules={[{ required: true, message: "请选择租户状态" }]}
           >
             <Select
               placeholder="请选择租户状态"
               style={{ width: 150 }}
               options={statusOptions}
-            ></Select>
+            />
           </Form.Item>
         </Form>
       </Modal>
     </>
   );
-})
+});
 
 export default TenantBtn;
