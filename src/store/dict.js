@@ -5,7 +5,7 @@ export const useDictStore = create((set, get) => ({
   dictArrObject: {},
   dictMapObject: {},
 
-  setDict: (dicts) => {
+  setDict: (dicts = []) => {
     const dictMapObject = {};
     for (const key in dicts) {
       const dictItem = dicts[key];

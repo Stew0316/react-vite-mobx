@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import style from '@/style/Login.module.scss'
-import { Input, Tooltip, Button,Form } from 'antd';
+import { Input, Tooltip, Button, Form } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { authCode, submit } from '@/api/auth/login';
 import md5 from 'md5';
@@ -10,22 +10,24 @@ function Login() {
   const [password, setUserPWD] = useState('')
   const [code, setUserCode] = useState('')
   const [codePic, setCodePic] = useState('')
+  const [captchaKey, setCaptchaKey] = useState('')
   const navigate = useNavigate();
   async function getCode() {
     let res = await authCode()
-    setCodePic(res)
+    setCaptchaKey(res.captchaKey)
+    setCodePic(res.captchaImage)
   }
   const onFinish = (values) => {
     log({
       ...values,
-      password: md5(values.password)
+      captchaKey,
     })
   };
   const log = async (data) => {
     let res = await submit(data).catch(() => {
       getCode()
     })
-    localStorage.setItem(LOCAL_ENV.VITE_MAIN_KEY+'-token', res.token)
+    localStorage.setItem(LOCAL_ENV.VITE_MAIN_KEY + '-token', res.token)
     navigate('/home')
   }
   useEffect(() => {
@@ -75,7 +77,7 @@ function Login() {
                 </Form.Item>
                 <Form.Item
                   label=""
-                  name="code"
+                  name="captcha"
                   rules={[
                     {
                       required: true,
@@ -83,32 +85,25 @@ function Login() {
                     },
                   ]}
                 >
-                  <Input
-                    type='text'
-                    className='code'
-                    addonAfter={
-                    // <img src={codePic} onClick={getCode} style={{
-                    //   cursor: 'pointer'
-                    // }} />
-                    <div className='codeWrap' onClick={getCode} dangerouslySetInnerHTML={{ __html: codePic }}></div>
-                    }
-                    placeholder='请输入验证码'
-                  >              
-                  </Input>
+                  <Space.Compact style={{ width: '100%' }}>
+                    <Input
+                      type='text'
+                      className='captcha'
+                      placeholder='请输入验证码'
+                    >
+                    </Input>
+                    <img className='codeWrap' src={codePic} onClick={getCode} />
+                  </Space.Compact>
                 </Form.Item>
                 <Form.Item
-                  
+
                 >
-                  <Button  htmlType="submit" className='btn' type="primary" block>登录</Button>
+                  <Button htmlType="submit" className='btn' type="primary" block>登录</Button>
                 </Form.Item>
               </Form>
-              
-              
+
+
             </div>
-          </div>
-          <div className='word'>
-            <p>尚未创建账号？</p>
-            <p>创建账号</p>
           </div>
         </div>
       </div>

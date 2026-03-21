@@ -1,18 +1,17 @@
-import service from ".."
+import service from "..";
 
 export function authCode() {
   return service({
-    method: 'get',
-    url: '/login/code',
-    noMessage: true
-  })
+    method: "get",
+    url: "/auth/captcha",
+    noMessage: true,
+  });
 }
 
 export function submit(data) {
   return service({
-    method: 'post',
-    url: '/login/login',
-    data
-  })
+    method: "post",
+    url: "/auth/login",
+    data,
+  });
 }
-

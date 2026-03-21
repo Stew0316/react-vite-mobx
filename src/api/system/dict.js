@@ -1,9 +1,11 @@
 import service from "..";
 
+const API_PREFIX = "/manage";
+
 export function getPage(params) {
   return service({
     method: "get",
-    url: "/dict/type/list",
+    url: API_PREFIX + "/dict/type/list",
     params,
   });
 }
@@ -11,7 +13,7 @@ export function getPage(params) {
 export function delItem(ids) {
   return service({
     method: "post",
-    url: "/dict/type/delete",
+    url: API_PREFIX + "/dict/type/delete",
     data: {
       ids,
     },
@@ -21,7 +23,7 @@ export function delItem(ids) {
 export function addItem(data) {
   return service({
     method: "post",
-    url: "/dict/type/add",
+    url: API_PREFIX + "/dict/type/add",
     data: { ...data, tenantId: 6 },
   });
 }
@@ -29,7 +31,7 @@ export function addItem(data) {
 export function editItem(data) {
   return service({
     method: "post",
-    url: "/dict/type/update",
+    url: API_PREFIX + "/dict/type/update",
     data: { ...data, tenantId: 6 },
   });
 }
@@ -37,7 +39,7 @@ export function editItem(data) {
 export function itemPage(params) {
   return service({
     method: "get",
-    url: "/dict/item/list",
+    url: API_PREFIX + "/dict/item/list",
     params,
   });
 }
@@ -45,7 +47,7 @@ export function itemPage(params) {
 export function itemDel(ids) {
   return service({
     method: "post",
-    url: "/dict/item/delete",
+    url: API_PREFIX + "/dict/item/delete",
     data: {
       ids,
     },
@@ -55,7 +57,7 @@ export function itemDel(ids) {
 export function itemAdd(data) {
   return service({
     method: "post",
-    url: "/dict/item/add",
+    url: API_PREFIX + "/dict/item/add",
     data,
   });
 }
@@ -63,7 +65,7 @@ export function itemAdd(data) {
 export function itemEdit(data) {
   return service({
     method: "post",
-    url: "/dict/item/update",
+    url: API_PREFIX + "/dict/item/update",
     data,
   });
 }
@@ -71,7 +73,7 @@ export function itemEdit(data) {
 export function getDictAll() {
   return service({
     method: "post",
-    url: "/dict/type/all",
+    url: API_PREFIX + "/dict/type/all",
     data: { tenantId: 6 },
   });
 }

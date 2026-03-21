@@ -1,24 +1,28 @@
 .login {
   height: 100vh;
-  background: rgb(109,157,154);
+  background: rgb(109, 157, 154);
   display: flex;
   align-items: center;
   :global {
     .cont {
       width: 55vw;
       height: 80vh;
-      background:  linear-gradient(95deg, rgb(25,80,89) 45%, rgb(255,186,50) 0);
+      background: linear-gradient(
+        95deg,
+        rgb(25, 80, 89) 45%,
+        rgb(255, 186, 50) 0
+      );
       border-radius: 10px;
       display: flex;
 
       .btn {
-        background: rgb(26,84,92);
+        background: rgb(26, 84, 92);
         height: 45px;
         // margin-top: 30px;
       }
       .left {
         width: 48%;
-        background: url('@/source/col.png') no-repeat 40% center / auto 330px;
+        background: url("@/source/col.png") no-repeat 40% center / auto 330px;
       }
       .right {
         flex: 1;
@@ -51,7 +55,8 @@
                 height: 30.32px;
                 width: 90px;
                 cursor: pointer;
-                &>svg {
+                display: flex;
+                & > svg {
                   height: 95%;
                   width: 100%;
                 }
@@ -66,14 +71,13 @@
             padding: 0 12px;
             box-shadow: 0 5px 10px #ededed;
             span:nth-child(1) {
-              color:#CD853F;
+              color: #cd853f;
               font-size: 14px;
               font-weight: 600;
-              
             }
             span:nth-child(2) {
               font-size: 13px;
-              color:	#D3D3D3;
+              color: #d3d3d3;
             }
           }
         }
@@ -85,12 +89,12 @@
             letter-spacing: 2px;
           }
           p:nth-child(1) {
-            color: #F5FFFA;
+            color: #f5fffa;
             font-weight: 600;
           }
           p:nth-child(2) {
             font-weight: 600;
-            color: rgb(26,84,92);
+            color: rgb(26, 84, 92);
           }
         }
       }

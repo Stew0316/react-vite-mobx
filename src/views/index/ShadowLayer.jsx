@@ -42,14 +42,14 @@ function MapShadow({ map, ...props }) {
     ctx.fill();
     ctx.closePath();
     ctx.restore();
-    const img = new Image();
+    const img = new window.Image();
     img.src = "https://p3-sdbk2-media.byteimg.com/tos-cn-i-xv4ileqgde/5ba62088fc4048d69cbf62b990333aa4~tplv-xv4ileqgde-resize-w:750.image"; // 图片URL，替换成你需要的图片
     img.onload = () => {
-        // 绘制多边形背景
-        path(ctx, arr)
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(img, 0, 0, size.x, size.y);
+      // 绘制多边形背景
+      path(ctx, arr)
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(img, 0, 0, size.x, size.y);
     };
   };
   const path = (ctx, arr) => {
@@ -73,7 +73,7 @@ function MapShadow({ map, ...props }) {
   }, []);
   useEffect(() => {
     if (!map) return;
-    setSize(prevUser => ({...prevUser,...map.getSize()}));
+    setSize(prevUser => ({ ...prevUser, ...map.getSize() }));
     map.on("moveend", (data) => {
       setNewPos(data.target.dragging._lastPos || { x: 0, y: 0 });
     });
@@ -81,7 +81,7 @@ function MapShadow({ map, ...props }) {
   useEffect(() => {
     if (!size.x || !size.y) return; // 确保 size 已更新
     draw();  // 依赖于 size 更新
-    
+
   }, [size]);  // size 变化时重新触发 draw
   return (
     <div
