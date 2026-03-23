@@ -1,9 +1,27 @@
 import { useDictStore } from "@/store/dict";
 
-const useDict = (key) => {
-  const dict = useDictStore((state) => state.dict[key]);
-
+export const useDictArray = (key) => {
+  const dict = useDictStore((state) => state.dictArrObject[key]);
   return dict;
 };
 
-export default useDict;
+export const useDictObj = (key) => {
+  const dict = useDictStore((state) => state.dictMapObject[key]);
+  return dict;
+};
+
+export const useDictObjAndList = (key) => {
+  const dict = useDictStore((state) => {
+    return {
+      map: state.dictMapObject[key],
+      list: state.dictArrObject[key],
+    };
+  });
+  return dict;
+};
+
+export default {
+  useDictArray,
+  useDictObj,
+  useDictObjAndList,
+};
