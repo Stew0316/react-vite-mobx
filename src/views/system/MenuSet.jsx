@@ -8,6 +8,9 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
+import * as AntdIcons from "@ant-design/icons";
+import { numberStrToBoolList } from "@/utils/dataChange";
+import { useMemo } from "react";
 
 const MENU_TYPE_MAP = {
   1: "目录",
@@ -19,16 +22,6 @@ const MENU_TYPE_OPTIONS = [
   { label: "目录", value: 1 },
   { label: "菜单", value: 2 },
   { label: "按钮", value: 3 },
-];
-
-const STATUS_OPTIONS = [
-  { label: "启用", value: 1 },
-  { label: "禁用", value: 0 },
-];
-
-const BOOL_RADIO = [
-  { label: "是", value: true },
-  { label: "否", value: false },
 ];
 
 const normalizeTreeResult = (res) => {
@@ -72,7 +65,11 @@ const MenuSet = () => {
     autoRequest: true,
   });
 
+  const [iconOpen, setIconOpen] = useState(false);
+
   const statusOptions = useDictArray("common_status");
+  const rawYnOptions = useDictArray("common_yn");
+  const ynOptions = useMemo(() => numberStrToBoolList(rawYnOptions), [rawYnOptions]);
 
   const columns = [
     {
@@ -83,7 +80,7 @@ const MenuSet = () => {
     },
     {
       title: "菜单类型",
-      dataIndex: "menu_type",
+      dataIndex: "menuType",
       width: 100,
       render: (value) => MENU_TYPE_MAP[value] || "-",
     },
@@ -114,7 +111,7 @@ const MenuSet = () => {
     },
     {
       title: "可见",
-      dataIndex: "is_visible",
+      dataIndex: "isVisible",
       width: 80,
       render: (value) => (
         <Tag color={value ? "green" : "red"}>{value ? "显示" : "隐藏"}</Tag>
@@ -122,13 +119,13 @@ const MenuSet = () => {
     },
     {
       title: "缓存",
-      dataIndex: "is_cache",
+      dataIndex: "isCache",
       width: 80,
       render: (value) => (value ? "是" : "否"),
     },
     {
       title: "外链",
-      dataIndex: "is_frame",
+      dataIndex: "isFrame",
       width: 80,
       render: (value) => (value ? "是" : "否"),
     },
@@ -144,7 +141,7 @@ const MenuSet = () => {
     },
     {
       title: "更新时间",
-      dataIndex: "updated_time",
+      dataIndex: "updatedTime",
       width: 180,
       render: (text) => (text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : ""),
     },
@@ -187,6 +184,32 @@ const MenuSet = () => {
     </div>
   );
 
+  const iconKeys = Object.keys(AntdIcons).filter(
+    (key) => key.endsWith('Outlined')
+  );
+
+  const iconClick = (key) => {
+    console.log("Selected icon:", key);
+    form.setFieldsValue({ icon: key });
+    setIconOpen(false);
+  };
+
+  const selectedIconKey = Form.useWatch("icon", form);
+  const SelectedIcon = selectedIconKey ? AntdIcons[selectedIconKey] : null;
+
+  const iconContent = <div style={{ maxWidth: '400px', maxHeight: "300px", overflowY: 'auto' }}>
+    {
+      iconKeys.map((key) => {
+        const IconComponent = AntdIcons[key];
+        return (
+          <span key={key} style={{ margin: '12px', cursor: 'pointer', display: 'inline-flex' }} onClick={() => iconClick(key)}>
+            <IconComponent style={{ fontSize: 30 }} />
+          </span>
+        )
+      })
+    }
+  </div>
+
   return (
     <>
       <Wrap
@@ -207,11 +230,11 @@ const MenuSet = () => {
           <Select
             style={{ width: 180 }}
             placeholder="请选择菜单状态"
-            options={statusOptions || STATUS_OPTIONS}
+            options={statusOptions}
             allowClear
           />
         </Form.Item>
-        <Form.Item label="菜单类型" name="menu_type">
+        <Form.Item label="菜单类型" name="menuType">
           <Select
             style={{ width: 180 }}
             placeholder="请选择菜单类型"
@@ -234,18 +257,18 @@ const MenuSet = () => {
           labelCol={{ span: 8 }}
           form={form}
           initialValues={{
-            parent_id: null,
-            menu_type: 1,
-            sort: 0,
-            is_visible: true,
-            is_cache: false,
-            is_frame: false,
-            status: 1,
+            parentId: null,
+            menuType: 1,
+            sort: '0',
+            isVisible: true,
+            isCache: false,
+            isFrame: false,
+            status: '1',
           }}
         >
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item label="上级菜单" name="parent_id">
+              <Form.Item label="上级菜单" name="parentId">
                 <TreeSelect
                   treeData={buildParentOptions(tableData)}
                   placeholder="请选择上级菜单"
@@ -267,7 +290,7 @@ const MenuSet = () => {
             <Col span={12}>
               <Form.Item
                 label="菜单类型"
-                name="menu_type"
+                name="menuType"
                 rules={[{ required: true, message: "请选择菜单类型" }]}
               >
                 <Select options={MENU_TYPE_OPTIONS} placeholder="请选择菜单类型" />
@@ -276,7 +299,7 @@ const MenuSet = () => {
             <Col span={12}>
               <Form.Item label="菜单状态" name="status">
                 <Select
-                  options={statusOptions || STATUS_OPTIONS}
+                  options={statusOptions}
                   placeholder="请选择菜单状态"
                 />
               </Form.Item>
@@ -300,7 +323,20 @@ const MenuSet = () => {
             </Col>
             <Col span={12}>
               <Form.Item label="菜单图标" name="icon">
-                <Input placeholder="请输入菜单图标" />
+                <Popover
+                  content={iconContent}
+                  title="选择一个图标"
+                  trigger="click"
+                  open={iconOpen}
+                  onOpenChange={setIconOpen}
+                >
+                  <Input
+                    placeholder="请输入菜单图标"
+                    readOnly
+                    value={selectedIconKey}
+                    suffix={SelectedIcon ? <SelectedIcon /> : null}
+                  />
+                </Popover>
               </Form.Item>
             </Col>
 
@@ -310,19 +346,19 @@ const MenuSet = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="是否可见" name="is_visible">
-                <Radio.Group options={BOOL_RADIO} optionType="button" />
+              <Form.Item label="是否可见" name="isVisible">
+                <Radio.Group options={ynOptions} optionType="button" />
               </Form.Item>
             </Col>
 
             <Col span={12}>
-              <Form.Item label="是否缓存" name="is_cache">
-                <Radio.Group options={BOOL_RADIO} optionType="button" />
+              <Form.Item label="是否缓存" name="isCache">
+                <Radio.Group options={ynOptions} optionType="button" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="是否外链" name="is_frame">
-                <Radio.Group options={BOOL_RADIO} optionType="button" />
+              <Form.Item label="是否外链" name="isFrame">
+                <Radio.Group options={ynOptions} optionType="button" />
               </Form.Item>
             </Col>
 
