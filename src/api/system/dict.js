@@ -24,7 +24,7 @@ export function addItem(data) {
   return service({
     method: "post",
     url: API_PREFIX + "/dict/type/add",
-    data: { ...data, tenantId: 6 },
+    data,
   });
 }
 
@@ -32,7 +32,7 @@ export function editItem(data) {
   return service({
     method: "post",
     url: API_PREFIX + "/dict/type/update",
-    data: { ...data, tenantId: 6 },
+    data,
   });
 }
 
@@ -74,6 +74,5 @@ export function getDictAll() {
   return service({
     method: "post",
     url: API_PREFIX + "/dict/type/all",
-    data: { tenantId: 6 },
   });
 }

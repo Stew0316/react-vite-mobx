@@ -31,15 +31,6 @@ const normalizeTreeResult = (res) => {
   return [];
 };
 
-const buildParentOptions = (nodes = []) => {
-  return nodes.map((node) => ({
-    title: node.name,
-    value: node.id,
-    key: node.id,
-    children: buildParentOptions(node.children || []),
-  }));
-};
-
 const MenuSet = () => {
   const {
     tableData,
@@ -270,9 +261,10 @@ const MenuSet = () => {
             <Col span={12}>
               <Form.Item label="上级菜单" name="parentId">
                 <TreeSelect
-                  treeData={buildParentOptions(tableData)}
+                  treeData={tableData}
                   placeholder="请选择上级菜单"
                   allowClear
+                  fieldNames={{ label: 'name', value: 'id', children: 'children' }}
                   treeDefaultExpandAll
                 />
               </Form.Item>
