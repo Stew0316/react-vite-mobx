@@ -10,3 +10,12 @@ export function numberStrToBoolList(dataList = [], key = "value") {
     };
   });
 }
+
+export function stringToNumber(dataList = [], key = "value") {
+  return dataList.map((data) => {
+    return {
+      ...data,
+      [key]: Number(data[key]),
+    };
+  });
+}
