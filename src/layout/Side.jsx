@@ -17,9 +17,9 @@ const items = [
     icon: <BarChartOutlined />,
   },
   {
-    label: '权限管理',
-    key: '/home/permission',
-    icon: <LockOutlined />,
+    icon: <AppstoreOutlined />,
+    label: '系统管理',
+    key: '/home/system',
     children: [
       {
         label: '角色',
@@ -33,20 +33,13 @@ const items = [
         label: '机构',
         key: '/home/tenant',
       },
-    ]
-  },
-  {
-    icon: <AppstoreOutlined />,
-    label: '系统管理',
-    key: '/home/system',
-    children: [
-      {
-        label: '菜单',
-        key: '/home/menuSet',
-      },
       {
         label: '用户',
         key: '/home/users',
+      },
+      {
+        label: '菜单',
+        key: '/home/menuSet',
       },
       {
         label: '字典',

@@ -19,30 +19,22 @@ import Tree from "@/views/others/Tree"
 import EchartsMask from "@/views/echarts/EchartsMask";
 import Business from "@/views/business/Business"
 import MenuSet from "@/views/system/MenuSet"
-import Role from "@/views/permission/Role"
+import Role from "@/views/system/role/Role"
 import Account from "@/views/system/Account"
 import Dict from "@/views/system/dict/Dict";
-import Users from '@/views/system/Users'
+import Users from '@/views/system/User/Users'
 import Map from "@/views/index/map";
 import Tenant from "@/views/system/tenant/Tenant";
+import Dept from "@/views/system/dept/Dept";
 import Error404 from "@/views/error/404";
 import Error403 from "@/views/error/403";
-// const route = [
-//   {
-//     path: "/",
-//     lazy: () => import("../views/App"),
-//     // element: <App></App>,
-//   },
-// test1111
-// ]
+
 // 用来做路由守卫，判断是否登录并且充定向
 const PrivateRoute = ({ children }) => {
   /**
-   * useAuth未完成
-   * 当前设想是通过token判断是否登录，如果使用了refreshtoken，则需要判断token是否过期，如果过期就跳转登录页，如果没有过期就跳转首页
-   * 需要添加nprogress进度条，有toke的时候显示进度条登录，成功跳转，失败则返回登录页
-   * auth数据是ai生成，需要更改，当前只是为了验证路由拦截
-   * */
+   * 使用auth拦截
+   * 待完善，需要做一个动态路由
+   */
   const auth = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -72,6 +64,7 @@ const route = createRoutesFromElements(
       <Route path="account" element={<Account />}></Route>
       <Route path="dict" element={<Dict />}></Route>
       <Route path="dictGlobal" element={<Dict isGlobal />}></Route>
+      <Route path="dept" element={<Dept />}></Route>
       <Route path="users" element={<Users />}></Route>
       <Route path="tenant" element={<Tenant />}></Route>
     </Route>

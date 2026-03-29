@@ -35,3 +35,19 @@ export function editItem(data) {
     data,
   });
 }
+
+export function getPermitId(tenantId) {
+  return service({
+    method: "post",
+    url: API_PREFIX + "/tenant/menu/menuIds",
+    data: { tenantId },
+  });
+}
+
+export function savePermit(data) {
+  return service({
+    method: "post",
+    url: API_PREFIX + "/tenant/menu/assign",
+    data,
+  });
+}

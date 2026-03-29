@@ -94,6 +94,10 @@ const MenuSet = () => {
       title: "图标",
       dataIndex: "icon",
       width: 120,
+      render: (text, record) => {
+        const IconComponent = AntdIcons[record.icon];
+        return text ? <IconComponent /> : "-";
+      }
     },
     {
       title: "排序",
@@ -180,7 +184,6 @@ const MenuSet = () => {
   );
 
   const iconClick = (key) => {
-    console.log("Selected icon:", key);
     form.setFieldsValue({ icon: key });
     setIconOpen(false);
   };

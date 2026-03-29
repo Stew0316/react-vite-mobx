@@ -1,15 +1,14 @@
 import service from "..";
 
-const API_PREFIX = "/manage/role";
+const API_PREFIX = "/manage/dept";
 
-export function getList(params) {
+export function getTree(params) {
   return service({
     method: "get",
-    url: API_PREFIX + "/list",
+    url: API_PREFIX + "/tree",
     params,
   });
 }
-
 export function delItem(ids) {
   return service({
     method: "post",
@@ -32,22 +31,6 @@ export function editItem(data) {
   return service({
     method: "post",
     url: API_PREFIX + "/update",
-    data,
-  });
-}
-
-export function getPermitTree(roleId) {
-  return service({
-    method: "post",
-    url: API_PREFIX + "/menuIds",
-    data: { roleId },
-  });
-}
-
-export function assignMenus(data) {
-  return service({
-    method: "post",
-    url: API_PREFIX + "/assignMenus",
     data,
   });
 }
