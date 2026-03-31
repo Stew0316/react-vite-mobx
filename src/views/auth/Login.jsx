@@ -53,6 +53,18 @@ function Login() {
               >
                 <Form.Item
                   label=""
+                  name="tenantId"
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入公司ID',
+                    },
+                  ]}
+                >
+                  <Input placeholder='请输入公司ID' />
+                </Form.Item>
+                <Form.Item
+                  label=""
                   name="username"
                   rules={[
                     {
