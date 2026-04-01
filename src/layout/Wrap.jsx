@@ -1,9 +1,15 @@
 import { Form, Button, Table } from "antd"
-import { useRef } from "react"
+import { useRef, forwardRef, useImperativeHandle } from "react"
 
-// defaultParams：固定参数，每次查询（含重置）都会带上，不会被表单覆盖
-const Wrap = ({ children, getData, columns, tableData = [], Btn, rowKey = 'id', defaultParams = {}, ...props }) => {
+// defaultParams:固定参数,每次查询(含重置)都会带上,不会被表单覆盖
+const Wrap = forwardRef(({ children, getData, columns, tableData = [], Btn, rowKey = 'id', defaultParams = {}, ...props }, ref) => {
   const formRef = useRef()
+
+  // 暴露方法给父组件
+  useImperativeHandle(ref, () => ({
+    reset,
+    resetFields: () => formRef.current.resetFields(),
+  }))
 
   const onFinish = (values) => {
     getData({ ...defaultParams, ...values })
@@ -41,6 +47,6 @@ const Wrap = ({ children, getData, columns, tableData = [], Btn, rowKey = 'id', 
       </div>
     </div>
   )
-}
+})
 
 export default Wrap

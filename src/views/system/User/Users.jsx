@@ -1,239 +1,175 @@
 import Wrap from "@/layout/Wrap";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import style from "@/style/User.module.scss";
-import { Input, Tree, Button, Form, Select } from "antd";
-import { PlusOutlined, DeleteOutlined,EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { getTree } from "@/api/system/dept";
+import { getPage, delItem } from "@/api/system/user";
+import { RollbackOutlined, DeleteOutlined, EyeOutlined, EditOutlined, UserAddOutlined } from "@ant-design/icons";
 import UserBtn from "./UserBtn";
-const { Search } = Input;
-const x = 3;
-const y = 2;
-const z = 1;
-const defaultData = [];
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || "0";
-  const tns = _tns || defaultData;
-  const children = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    tns.push({
-      title: key,
-      key,
-    });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
-const dataList = [];
-const generateList = (data) => {
-  for (let i = 0; i < data.length; i++) {
-    const node = data[i];
-    const { key } = node;
-    dataList.push({
-      key,
-      title: key,
-    });
-    if (node.children) {
-      generateList(node.children);
-    }
-  }
-};
-generateList(defaultData);
-const getParentKey = (key, tree) => {
-  let parentKey;
-  for (let i = 0; i < tree.length; i++) {
-    const node = tree[i];
-    if (node.children) {
-      if (node.children.some((item) => item.key === key)) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
-      }
-    }
-  }
-  return parentKey;
-};
-const columns = [
-  {
-    title: '登录账号',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '所属租户',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '用户姓名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '所属角色',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '所属部门',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '用户平台',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '操作',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text, record, index) => (
-      <>
-        <Button icon={<EyeOutlined />} type="link">查看</Button>
-        <Button icon={<EditOutlined />} type="link">编辑</Button>
-        <Button icon={<DeleteOutlined />} type="link">删除</Button>
-      </>
-    ),
-  },
-]
+import useCrudTable from "@/hooks/useCrudTable";
+import { useDictObj, useDictArray } from "@/hooks/dict";
+
 const Users = () => {
-  const [expandedKeys, setExpandedKeys] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [autoExpandParent, setAutoExpandParent] = useState(true);
-  const [tableData, setTableData] = useState([{key: 1}]);
-  const [selectData, setSelectData] = useState([]);
-  const onExpand = (newExpandedKeys) => {
-    setExpandedKeys(newExpandedKeys);
-    setAutoExpandParent(false);
-  };
-  const searchChange = (e) => {
-    const { value } = e.target;
-    const newExpandedKeys = dataList
-      .map((item) => {
-        if (item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, defaultData);
-        }
-        return null;
-      })
-      .filter((item, i, self) => !!(item && self.indexOf(item) === i));
-    setExpandedKeys(newExpandedKeys);
-    setSearchValue(value);
-    setAutoExpandParent(true);
-  };
-  const rowChange = (selectedRowKeys, selectedRows) => {
-    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    setSelectData(selectedRows);
+
+  const [treeData, setTreeData] = useState([]);
+  const [deptId, setDeptId] = useState();
+  const btnRef = useRef();
+  const wrapRef = useRef();  // 添加 Wrap 组件的 ref
+
+  const dictObj = useDictObj('common_status');
+  const statusOptions = useDictArray("common_status");
+
+  // 使用 useMemo 让 defaultParams 响应式更新
+  const defaultParams = useMemo(() => ({ deptId }), [deptId]);
+
+  const {
+    page,
+    tableData,
+    selectData,
+    rowSelection,
+    pagiChange,
+    openEdit,
+    getList,
+    delData,
+    setTableData
+  } = useCrudTable({
+    autoRequest: false,
+    listApi: getPage,
+    delApi: delItem,
+    defaultParams,
+    openEditOverride: (record) => btnRef.current?.editModal(record),
+  })
+
+  const columns = [
+    {
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: '用户昵称',
+      dataIndex: 'nickname',
+      key: 'nickname',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text, record) => {
+        return dictObj[record.status]
+      }
+    },
+    {
+      title: '用户类型',
+      render: (_, record) => {
+        return record.userType == 1 ? "普通用户" : "管理员"
+      }
+    },
+    {
+      title: '所属部门',
+      dataIndex: 'deptName',
+      key: 'deptName',
+    },
+    {
+      title: '操作',
+      dataIndex: 'name',
+      key: 'name',
+      width: 400,
+      render: (text, record, index) => (
+        <>
+          <Button icon={<EyeOutlined />} type="link">查看</Button>
+          <Button icon={<RollbackOutlined />} type="link">重置密码</Button>
+          <Button icon={<UserAddOutlined />} type="link">分配角色</Button>
+          <Button icon={<EditOutlined />} type="link" onClick={() => openEdit(record)}>编辑</Button>
+          <Button danger icon={<DeleteOutlined />} type="link" onClick={() => delData(record)}>删除</Button>
+        </>
+      ),
+    },
+  ]
+
+  const searchChange = (data) => {
+    console.log(data);
   }
-  const getData = () => {
-    console.log('getData');
+
+  const getDept = async () => {
+    const res = await getTree({
+      status: 1
+    })
+    setTreeData(res);
   }
-  const treeData = useMemo(() => {
-    const loop = (data) =>
-      data.map((item) => {
-        const strTitle = item.title;
-        const index = strTitle.indexOf(searchValue);
-        const beforeStr = strTitle.substring(0, index);
-        const afterStr = strTitle.slice(index + searchValue.length);
-        const title =
-          index > -1 ? (
-            <span key={item.key}>
-              {beforeStr}
-              <span className="site-tree-search-value">{searchValue}</span>
-              {afterStr}
-            </span>
-          ) : (
-            <span key={item.key}>{strTitle}</span>
-          );
-        if (item.children) {
-          return {
-            title,
-            key: item.key,
-            children: loop(item.children),
-          };
-        }
-        return {
-          title,
-          key: item.key,
-        };
-      });
-    return loop(defaultData);
-  }, [searchValue]);
-  const [userOption, setUserOption] = useState([
-    {
-      value: 'jack',
-      label: 'Jack',
-    },
-    {
-      value: 'lucy',
-      label: 'Lucy',
-    },
-    {
-      value: 'Yiminghe',
-      label: 'yiminghe',
-    },
-  ])
+
+  const treeSelect = (selectedKeys, info) => {
+    const selectKey = selectedKeys[0];
+    setDeptId(selectKey);
+    setTableData([]);
+    getList({ deptId: selectKey });
+    wrapRef.current?.resetFields();
+  };
+
+  useEffect(() => {
+    getDept()
+  }, [])
+
   return (
     <div className={`${style.user}`}>
       <div className="left">
         <div className="top">
           <Input placeholder="输入关键字进行过滤" onChange={searchChange} allowClear></Input>
           <Tree
-            onExpand={onExpand}
-            autoExpandParent={autoExpandParent}
-            expandedKeys={expandedKeys}
+            className="tree"
             treeData={treeData}
+            fieldNames={{
+              title: 'name',
+              key: 'id',
+            }}
+            onSelect={treeSelect}
           />
         </div>
       </div>
-      <Wrap 
+      <Wrap
+        ref={wrapRef}
         className="right"
+        getData={getList}
         columns={columns}
+        rowSelection={rowSelection}
         tableData={tableData}
-        Btn={
-          <UserBtn 
-            getData={getData}
-            userOption={userOption}
-            selectData={selectData}
-          />
-        }
-        rowSelection={{
-          onChange: (selectedRowKeys, selectedRows) => rowChange(selectedRowKeys, selectedRows),
-          type: 'checkbox',
+        pagination={{
+          current: page.current,
+          pageSize: page.pageSize,
+          total: page.total,
+          onChange: pagiChange,
+          showSizeChanger: true,
+          showTotal: () => `共 ${page.total} 条`,
         }}
+        Btn={
+          <UserBtn ref={btnRef} selectData={selectData} getList={getList} />
+        }
       >
         <Form.Item
-          label="登录账号" 
-          name='name'
-          key='1'
-        >
-          <Input placeholder="请输入登录账号" />
-        </Form.Item>
-        <Form.Item
-          label="用户名称" 
-          name='name1'
-          key='2'
+          label="用户名称"
+          name='username'
         >
           <Input placeholder="请输入用户名称" />
         </Form.Item>
         <Form.Item
-          label="用户平台" 
-          name='name2'
-          key='3'
+          label="手机号码"
+          name='phone'
+        >
+          <Input placeholder="请输入手机号码" />
+        </Form.Item>
+        <Form.Item
+          label="状态"
+          name='status'
         >
           <Select
-            options={userOption}
-            style={{width: 200}}
-            placeholder="请选择用户平台"
+            style={{ width: 180 }}
+            placeholder="请选择用户状态"
+            options={statusOptions}
+            allowClear
           />
         </Form.Item>
       </Wrap>
