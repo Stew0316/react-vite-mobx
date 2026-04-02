@@ -146,7 +146,7 @@ const Users = () => {
           showTotal: () => `共 ${page.total} 条`,
         }}
         Btn={
-          <UserBtn ref={btnRef} selectData={selectData} getList={getList} />
+          <UserBtn ref={btnRef} selectData={selectData} getList={getList} deptId={deptId} />
         }
       >
         <Form.Item

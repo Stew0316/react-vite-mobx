@@ -1,6 +1,6 @@
 import { ConfigProvider, Button } from "antd"
-const SelfBtn = ({color, className, text, icon, ...props}) => {
-  const BTN = <Button type="primary" className={className} icon={icon}>
+const SelfBtn = ({ color, className, text, icon, ...props }) => {
+  const BTN = <Button type="primary" className={className} icon={icon} {...props}>
     {text}
   </Button>
   return <ConfigProvider
@@ -14,7 +14,7 @@ const SelfBtn = ({color, className, text, icon, ...props}) => {
       },
     }}
   >
-    {props.btn ? props.btn :BTN}
+    {props.btn ? props.btn : BTN}
   </ConfigProvider>
 }
 
