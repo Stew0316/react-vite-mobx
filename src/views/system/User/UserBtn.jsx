@@ -94,7 +94,7 @@ const UserBtn = forwardRef(({ getList, selectData, deptId, ...props }, ref) => {
           <Form.Item
             label="状态"
             name="status"
-            rules={[{ required: true, message: "请选择状态", max: 50 }]}
+            rules={[{ required: true, message: "请选择状态" }]}
           >
             <Select placeholder="请选择状态" style={{ width: '100%' }} options={statusOptionsNum}></Select>
           </Form.Item>
