@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import { useDictStore } from "@/store/dict";
-import { useLocation } from "react-router";
+import { useAuthStore } from "@/store/authStore";
 
 export function useStartApp() {
   // 获取所有的dict，写入store里
   const getDict = useDictStore((state) => state.getDict);
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
-    getDict();
-  }, []);
+    if (token) {
+      getDict();
+    }
+  }, [token]);
 }

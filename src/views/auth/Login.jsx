@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { authCode, submit } from '@/api/auth/login';
 import md5 from 'md5';
 import { LOCAL_ENV } from "@/common/localData";
+import { useAuthStore } from "@/store/authStore";
 function Login() {
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [username, setUserName] = useState('')
   const [password, setUserPWD] = useState('')
   const [code, setUserCode] = useState('')
@@ -28,6 +30,7 @@ function Login() {
       getCode()
     })
     localStorage.setItem(LOCAL_ENV.VITE_MAIN_KEY + '-token', res.token)
+    setAuth(res.token, null)
     navigate('/home')
   }
   useEffect(() => {

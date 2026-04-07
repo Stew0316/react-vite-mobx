@@ -7,11 +7,28 @@ import { RollbackOutlined, DeleteOutlined, EyeOutlined, EditOutlined, UserAddOut
 import UserBtn from "./UserBtn";
 import useCrudTable from "@/hooks/useCrudTable";
 import { useDictObj, useDictArray } from "@/hooks/dict";
+import dayjs from "dayjs";
+
+const KEY_MAP = {
+  username: "用户名称",
+  phone: "手机号码",
+  status: "状态",
+  createdTime: "创建时间",
+  deptName: "所属部门",
+  lastLoginTime: "最后登录时间",
+  id: "用户ID",
+  nickname: "用户昵称",
+  remark: "备注",
+  status: "状态",
+  updatedTime: "更新时间",
+}
 
 const Users = () => {
 
   const [treeData, setTreeData] = useState([]);
   const [deptId, setDeptId] = useState();
+  const [userData, setUserData] = useState({});
+  const [viewModalOpen, setViewModalOpen] = useState(false);
   const btnRef = useRef();
   const wrapRef = useRef();  // 添加 Wrap 组件的 ref
 
@@ -81,7 +98,7 @@ const Users = () => {
       width: 400,
       render: (text, record, index) => (
         <>
-          <Button icon={<EyeOutlined />} type="link">查看</Button>
+          <Button icon={<EyeOutlined />} type="link" onClick={() => openView(record)}>查看</Button>
           <Button icon={<RollbackOutlined />} type="link">重置密码</Button>
           <Button icon={<UserAddOutlined />} type="link">分配角色</Button>
           <Button icon={<EditOutlined />} type="link" onClick={() => openEdit(record)}>编辑</Button>
@@ -90,6 +107,33 @@ const Users = () => {
       ),
     },
   ]
+
+  const openView = (record) => {
+    setUserData(record);
+    setViewModalOpen(true);
+  }
+
+  const viewData = useMemo(() => {
+    const data = [];
+    for (const dataValue of Object.entries(userData)) {
+      const [key, value] = dataValue;
+      if (!KEY_MAP[key]) continue;
+      let childValue = value;
+      if (key.includes('Time')) {
+        childValue = dayjs(value).format("YYYY-MM-DD HH:mm:ss");
+      }
+      if (key == 'status') {
+        childValue = dictObj[value];
+      }
+      data.push({
+        key,
+        label: KEY_MAP[key],
+        span: key.includes('Time') || key == 'remark' ? 3 : 1,
+        children: childValue
+      })
+    }
+    return data;
+  }, [userData])
 
   const searchChange = (data) => {
     console.log(data);
@@ -173,6 +217,16 @@ const Users = () => {
           />
         </Form.Item>
       </Wrap>
+
+      <Modal
+        title="查看用户"
+        open={viewModalOpen}
+        width={700}
+        footer={null}
+        onCancel={() => setViewModalOpen(false)}
+      >
+        <Descriptions items={viewData} />
+      </Modal>
     </div>
   );
 };

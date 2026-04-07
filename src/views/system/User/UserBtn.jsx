@@ -30,6 +30,10 @@ const UserBtn = forwardRef(({ getList, selectData, deptId, ...props }, ref) => {
   const statusOptions = useDictArray("common_status");
   const statusOptionsNum = useMemo(() => stringToNumber(statusOptions), [statusOptions]);
 
+  useImperativeHandle(ref, () => ({
+    editModal: openEditModal,
+  }));
+
   return (
     <>
       <div className="btns">
@@ -62,7 +66,7 @@ const UserBtn = forwardRef(({ getList, selectData, deptId, ...props }, ref) => {
           <Form.Item
             label="密码"
             name="password"
-            rules={[{ required: true, message: "请输入密码", max: 50 }]}
+            rules={[{ required: !isEdit, message: "请输入密码", max: 50 }]}
           >
             <Input type="password" placeholder="请输入密码" />
           </Form.Item>

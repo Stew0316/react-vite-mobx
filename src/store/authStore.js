@@ -1,7 +1,8 @@
 import { create } from "zustand";
+import { LOCAL_ENV } from "@/common/localData";
 
 export const useAuthStore = create((set) => ({
-  token: null,
+  token: localStorage.getItem(`${LOCAL_ENV.VITE_MAIN_KEY}-token`) || null,
   userInfo: null,
   menus: [],
 
