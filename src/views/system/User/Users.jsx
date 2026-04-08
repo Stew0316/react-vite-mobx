@@ -119,7 +119,7 @@ const Users = () => {
       const [key, value] = dataValue;
       if (!KEY_MAP[key]) continue;
       let childValue = value;
-      if (key.includes('Time')) {
+      if (key.includes('Time') && value) {
         childValue = dayjs(value).format("YYYY-MM-DD HH:mm:ss");
       }
       if (key == 'status') {

@@ -8,6 +8,8 @@ import { stringToNumber } from '@/utils/dataChange';
 
 const UserBtn = forwardRef(({ getList, selectData, deptId, ...props }, ref) => {
 
+  const defaultParams = useMemo(() => ({ deptId }), [deptId]);
+
   const {
     isEdit,
     isModalOpen,
@@ -25,6 +27,7 @@ const UserBtn = forwardRef(({ getList, selectData, deptId, ...props }, ref) => {
     autoRequest: false,
     onSuccess: getList,
     externalSelectData: selectData,
+    defaultParams
   });
 
   const statusOptions = useDictArray("common_status");

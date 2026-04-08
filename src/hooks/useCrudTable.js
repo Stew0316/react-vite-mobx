@@ -148,8 +148,12 @@ const useCrudTable = ({
   const handleOk = () => {
     form.validateFields().then((values) => {
       const request = isEdit
-        ? editApi({ [editKey]: editKeyValueRef.current, ...values })
-        : addApi(values);
+        ? editApi({
+            ...defaultParams,
+            [editKey]: editKeyValueRef.current,
+            ...values,
+          })
+        : addApi({ ...defaultParams, ...values });
 
       request.then(() => {
         message.success(isEdit ? "修改成功" : "添加成功");
