@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --theme-clor: #1890ff;
@@ -5,7 +7,6 @@
 
 body {
   margin: 0;
-  
 }
 p {
   margin: 0;

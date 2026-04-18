@@ -6,9 +6,10 @@ export function useStartApp() {
   // 获取所有的dict，写入store里
   const getDict = useDictStore((state) => state.getDict);
   const token = useAuthStore((state) => state.token);
-
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
   useEffect(() => {
     if (token) {
+      getUserInfo();
       getDict();
     }
   }, [token]);

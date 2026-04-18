@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 import { LOCAL_ENV } from "@/common/localData";
 import router from "@/router/index";
-
+import { X_Tenant_Id } from "@/constant/storage";
 const service = axios.create({
   baseURL: "",
   headers: {
@@ -16,6 +16,10 @@ service.interceptors.request.use(
     const token = localStorage.getItem(LOCAL_ENV.VITE_MAIN_KEY + "-token");
     if (token) {
       config.headers.authorization = token;
+    }
+    const tenantId = sessionStorage.getItem(X_Tenant_Id);
+    if (tenantId) {
+      config.headers[X_Tenant_Id] = tenantId;
     }
     return config;
   },

@@ -15,7 +15,7 @@ function App() {
 
   return (
     <ConfigProvider locale={zhCN} >
-      <Outlet key={location.pathname} />
+      <Outlet />
     </ConfigProvider >
   )
 }

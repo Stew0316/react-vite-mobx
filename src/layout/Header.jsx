@@ -1,22 +1,25 @@
 import Style from '@/style/Header.module.scss'
-import { Dropdown, Tooltip  } from 'antd'
+import { Dropdown, Tooltip } from 'antd'
 import { DownOutlined, SmileOutlined, GithubOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { observer } from 'mobx-react'
 import userStore from '@/store/user'
 import { LOCAL_ENV } from "@/common/localData";
+import TenantChange from "./TenantChange";
+import { useAuthStore } from '@/store/authStore';
 const name = LOCAL_ENV.VITE_NAME
 function HeaderBar(props) {
   const nav = useNavigate()
-  
-  function dropClick({key}) {
+  const isSuperAdmin = useAuthStore((state) => state.isSuperAdmin);
+
+  function dropClick({ key }) {
     const eventMap = {
       1: () => {
         nav('/people')
       },
       2: () => {
         localStorage.removeItem('token')
-        nav('/', {replace: true})
+        nav('/', { replace: true })
       }
     }
     eventMap[key]()
@@ -36,6 +39,7 @@ function HeaderBar(props) {
       <div className='left'>
         <img src="/fac.jpg" alt="" />
         <span>{name}</span>
+        {isSuperAdmin ? <TenantChange></TenantChange> : null}
       </div>
       <div className='right'>
         <Tooltip title='项目github地址'>

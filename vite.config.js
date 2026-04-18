@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import * as antd from "antd";
+import tailwindcss from "@tailwindcss/vite";
 
 function pathResolve(dir) {
   return resolve(__dirname, ".", dir);
@@ -22,6 +23,7 @@ export default ({ mode }) => {
     base: env.VITE_BASE_NAME,
     plugins: [
       react(),
+      tailwindcss(),
       AutoImport({
         imports: ["react"],
         resolvers: [

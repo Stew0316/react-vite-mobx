@@ -36,6 +36,13 @@ export function editItem(data) {
   });
 }
 
+export function getTenantAll() {
+  return service({
+    method: "get",
+    url: API_PREFIX + "/tenant/all",
+  });
+}
+
 export function getPermitId(tenantId) {
   return service({
     method: "post",

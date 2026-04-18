@@ -1,5 +1,7 @@
 export const SOURCE_SYSTEM_DEFAULT = "self";
 
+export const SUPER_ADMIN = "SUPER_ADMIN";
+
 export const SOURCE_SYSTEM_MAP = {
   self: "本系统",
 };
