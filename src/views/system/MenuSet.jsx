@@ -13,15 +13,15 @@ import { numberStrToBoolList } from "@/utils/dataChange";
 import { useMemo } from "react";
 
 const MENU_TYPE_MAP = {
-  1: "目录",
-  2: "菜单",
-  3: "按钮",
+  0: "目录",
+  1: "菜单",
+  2: "按钮",
 };
 
 const MENU_TYPE_OPTIONS = [
-  { label: "目录", value: 1 },
-  { label: "菜单", value: 2 },
-  { label: "按钮", value: 3 },
+  { label: "目录", value: 0 },
+  { label: "菜单", value: 1 },
+  { label: "按钮", value: 2 },
 ];
 
 const normalizeTreeResult = (res) => {
@@ -243,7 +243,7 @@ const MenuSet = () => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        destroyOnClose
+        destroyOnHidden
         width={920}
       >
         <Form

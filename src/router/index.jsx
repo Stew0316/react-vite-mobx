@@ -18,16 +18,10 @@ import People from '@/views/person/People'
 import Tree from "@/views/others/Tree"
 import EchartsMask from "@/views/echarts/EchartsMask";
 import Business from "@/views/business/Business"
-import MenuSet from "@/views/system/MenuSet"
-import Role from "@/views/system/role/Role"
-import Account from "@/views/system/Account"
-import Dict from "@/views/system/dict/Dict";
-import Users from '@/views/system/User/Users'
 import Map from "@/views/index/map";
-import Tenant from "@/views/system/tenant/Tenant";
-import Dept from "@/views/system/dept/Dept";
 import Error404 from "@/views/error/404";
 import Error403 from "@/views/error/403";
+import DynamicOutlet from "./DynamicOutlet";
 
 // 用来做路由守卫，判断是否登录并且充定向
 const PrivateRoute = ({ children }) => {
@@ -59,14 +53,7 @@ const route = createRoutesFromElements(
       <Route index element={<Map />}></Route>
       <Route path="echartsMask" element={<EchartsMask />}></Route>
       <Route path="business" element={<Business />}></Route>
-      <Route path="menuSet" element={<MenuSet />}></Route>
-      <Route path="role" element={<Role />}></Route>
-      <Route path="account" element={<Account />}></Route>
-      <Route path="dict" element={<Dict />}></Route>
-      <Route path="dictGlobal" element={<Dict isGlobal />}></Route>
-      <Route path="dept" element={<Dept />}></Route>
-      <Route path="users" element={<Users />}></Route>
-      <Route path="tenant" element={<Tenant />}></Route>
+      <Route path="*" element={<DynamicOutlet />}></Route>
     </Route>
     <Route path="others" lazy={() => import("../views/others/Others")}>
       <Route index element={<Clock />}></Route>

@@ -3,6 +3,7 @@ import { Button, Modal, Form, Input, Select } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { delItem, addItem, editItem } from "@/api/system/tenant";
 import useCrudTable from "@/hooks/useCrudTable";
+import PermButton from "@/components/PermButton";
 
 const statusOptions = [
   { value: 1, label: "启用" },
@@ -36,12 +37,12 @@ const TenantBtn = forwardRef(({ selectData, getList }, ref) => {
   return (
     <>
       <div className="btns">
-        <Button className="btn" type="primary" icon={<PlusOutlined />} onClick={openAdd}>
+        <PermButton perm="sys:tenant:add" className="btn" type="primary" icon={<PlusOutlined />} onClick={openAdd}>
           新增
-        </Button>
-        <Button type="primary" danger icon={<DeleteOutlined />} onClick={batchDel}>
+        </PermButton>
+        <PermButton perm="sys:tenant:delete" type="primary" danger icon={<DeleteOutlined />} onClick={batchDel}>
           删除
-        </Button>
+        </PermButton>
       </div>
 
       <Modal

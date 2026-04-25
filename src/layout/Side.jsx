@@ -1,11 +1,41 @@
 import Style from '@/style/Side.module.scss'
 import { Menu } from 'antd';
-import { useEffect, useState } from 'react';
-import { BarChartOutlined, AppstoreOutlined, LockOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
+import * as Icons from '@ant-design/icons';
 import { ICON_CODE } from '@/common/IconFont'
 import { useLocation, useNavigate } from 'react-router';
+import { useAuthStore } from '@/store/authStore';
 
-const items = [
+// 根据 icon 字符串名称动态渲染 Ant Design 图标
+const renderIcon = (iconName) => {
+  if (!iconName || !Icons[iconName]) return null;
+  const Icon = Icons[iconName];
+  return <Icon />;
+};
+
+// menuTree → Ant Design Menu items（保留树结构）
+// menuType: 0=目录, 1=菜单(页面), 2=按钮(跳过)
+const buildMenuItems = (tree) =>
+  (tree ?? [])
+    .filter((item) => item.isVisible && item.menuType !== 2)
+    .map((item) => {
+      if (item.menuType === 0) {
+        return {
+          key: String(item.id),
+          label: item.name,
+          icon: renderIcon(item.icon),
+          children: item.children?.length ? buildMenuItems(item.children) : undefined,
+        };
+      }
+      return {
+        key: `/home${item.path}`,
+        label: item.name,
+        icon: renderIcon(item.icon),
+      };
+    });
+
+// 固定菜单项（不受后台配置影响）
+const FIXED_ITEMS = [
   {
     label: '首页',
     key: '/home',
@@ -14,44 +44,9 @@ const items = [
   {
     label: 'echarts面板',
     key: '/home/echartsMask',
-    icon: <BarChartOutlined />,
+    icon: <Icons.BarChartOutlined />,
   },
-  {
-    icon: <AppstoreOutlined />,
-    label: '系统管理',
-    key: '/home/system',
-    children: [
-      {
-        label: '角色',
-        key: '/home/role',
-      },
-      {
-        label: '部门',
-        key: '/home/dept',
-      },
-      {
-        label: '机构',
-        key: '/home/tenant',
-      },
-      {
-        label: '用户',
-        key: '/home/users',
-      },
-      {
-        label: '菜单',
-        key: '/home/menuSet',
-      },
-      {
-        label: '字典',
-        key: '/home/dict',
-      },
-      {
-        label: '全局字典',
-        key: '/home/dictGlobal',
-      },
-    ]
-  }
-]
+];
 
 const getParentKeys = (menuItems, targetKey, parentKeys = []) => {
   for (const item of menuItems) {
@@ -74,13 +69,20 @@ const getParentKeys = (menuItems, targetKey, parentKeys = []) => {
 function Side(props) {
   const locate = useLocation()
   const navi = useNavigate()
+  const userInfo = useAuthStore((state) => state.userInfo);
+
+  const items = useMemo(
+    () => [...FIXED_ITEMS, ...buildMenuItems(userInfo?.menuTree)],
+    [userInfo?.menuTree]
+  );
+
   const [current, setCurrent] = useState(locate.pathname);
-  const [openKeys, setOpenKeys] = useState(getParentKeys(items, locate.pathname));
+  const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
     setCurrent(locate.pathname)
     setOpenKeys(getParentKeys(items, locate.pathname))
-  }, [locate.pathname])
+  }, [locate.pathname, items])
 
   const onClick = (e) => {
     setCurrent(e.key);

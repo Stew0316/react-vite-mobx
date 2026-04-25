@@ -7,6 +7,7 @@ import TenantBtn from "./TenantBtn";
 import useCrudTable from "@/hooks/useCrudTable";
 import { getPermitId, savePermit } from "@/api/system/tenant";
 import { getTree } from '@/api/system/menu';
+import PermButton from "@/components/PermButton";
 
 const statusMap = { 1: "启用", 0: "禁用" };
 const colorMap = { 1: "green", 0: "red" };
@@ -62,13 +63,13 @@ const Tenant = () => {
       dataIndex: "action",
       render: (_, record) => (
         <>
-          <Button icon={<EditOutlined />} type="link" onClick={() => openEdit(record)}>
+          <PermButton perm="sys:tenant:add" icon={<EditOutlined />} type="link" onClick={() => openEdit(record)}>
             编辑
-          </Button>
-          <Button icon={<MenuOutlined />} type="link" onClick={() => openPermit(record)}>菜单权限</Button>
-          <Button icon={<DeleteOutlined />} type="link" danger onClick={() => delData(record)}>
+          </PermButton>
+          <PermButton perm="sys:tenant:menu:query" icon={<MenuOutlined />} type="link" onClick={() => openPermit(record)}>菜单权限</PermButton>
+          <PermButton perm="sys:tenant:delete" icon={<DeleteOutlined />} type="link" danger onClick={() => delData(record)}>
             删除
-          </Button>
+          </PermButton>
         </>
       ),
     },
