@@ -1,11 +1,12 @@
 import { useLocation } from "react-router";
 import { useAuthStore } from "@/store/authStore";
 import componentMap from "./componentMap";
+import { KeepAlive } from "react-activation";
 
 /**
  * 递归提取 menuTree 中所有叶子节点（menuType === 2，有 component 的节点）
  */
-const flattenMenuTree = (tree) => {
+export const flattenMenuTree = (tree) => {
   const result = [];
   tree?.forEach((item) => {
     if (item.menuType === 1 && item.component) {
@@ -39,7 +40,16 @@ const DynamicOutlet = () => {
   const factory = componentMap[matched.component.slice(1)];
   if (!factory) return null;
 
-  return factory(matched);
+  const element = factory(matched);
+
+  if (matched.isCache) {
+    return (
+      <KeepAlive id={currentPath} name={currentPath}>
+        {element}
+      </KeepAlive>
+    );
+  }
+  return element;
 };
 
 export default DynamicOutlet;
