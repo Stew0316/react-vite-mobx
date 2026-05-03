@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { Button, Modal, Form, Input, Table, Row, Col, Switch, InputNumber } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { itemPage, itemDel, itemAdd, itemEdit } from "@/api/system/dict";
+import { itemPage, itemDel, itemAdd, itemEdit, getDictItemAll } from "@/api/system/dict";
 import useCrudTable from "@/hooks/useCrudTable";
 import { useDictStore } from "@/store/dict";
 
@@ -16,6 +16,7 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
   const dictStore = useDictStore();
   const [dialogOpen, setDialogOpen] = useState(false);
   const currentTypeIdRef = useRef(null);
+  const [dictItemAll, setDictItemAll] = useState([]);
 
   // 这个弹窗内部是一套完整独立的增删改查，用一个 useCrudTable 实例管理
   const {
@@ -44,6 +45,11 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
     autoRequest: false,
   });
 
+  const getDictItems = async (typeId) => {
+    const res = await getDictItemAll(typeId);
+    setDictItemAll(res);
+  }
+
   // 新增时自动带入当前字典类型 ID
   const handleAdd = () => {
     openAdd();
@@ -60,12 +66,23 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
     getList(values);
   };
 
+  const editDialog = () => {
+    if (isEdit) {
+      handleOk()
+    } else {
+      handleOk().then(() => {
+        getDictItems(configData.id);
+      });
+    }
+  }
+
   // 暴露给父组件 DictBtn：打开弹窗并加载对应字典项列表
   useImperativeHandle(ref, () => ({
     openDialog: (typeId) => {
       currentTypeIdRef.current = typeId;
       setDialogOpen(true);
       getList({ typeId });
+      getDictItems(typeId);
     },
   }));
 
@@ -76,7 +93,7 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
 
   const columns = [
     { title: "字典ID", dataIndex: "id" },
-    { title: "父级字典ID", dataIndex: "parentId" },
+    { title: "父级字典ID", dataIndex: "parentId", width: 120 },
     { title: "字典名称", dataIndex: "label" },
     { title: "字典编号", dataIndex: "value" },
     { title: "字典层级", dataIndex: "levelNum" },
@@ -150,7 +167,7 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
             />
           </Form.Item>
           <Form.Item>
-            <Button onClick={reset}>重置</Button>
+            <Button onClick={reset} style={{ marginRight: "4px" }}>重置</Button>
             <Button htmlType="submit" type="primary">
               查询
             </Button>
@@ -180,6 +197,7 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
           rowKey="id"
           rowSelection={rowSelection}
           style={{ minHeight: 400 }}
+          scroll={{ y: 400 }}
           pagination={{
             current: page.current,
             pageSize: page.pageSize,
@@ -196,7 +214,7 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
       <Modal
         title={isEdit ? "编辑" : "新增"}
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={editDialog}
         onCancel={handleCancel}
         width={1000}
       >
@@ -228,6 +246,19 @@ const DictConfigDialog = forwardRef(({ configData }, ref) => {
                 rules={[{ required: true, message: "请输入字典编号", max: 50 }]}
               >
                 <Input placeholder="请输入字典编号" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="父级字典"
+                name="parentId"
+              >
+                <Select
+                  placeholder="请选择父级字典"
+                  style={{ width: "100%" }}
+                  fieldNames={{ label: "label", value: "id" }}
+                  options={dictItemAll}
+                ></Select>
               </Form.Item>
             </Col>
             <Col span={12}>

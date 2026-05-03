@@ -5,6 +5,9 @@ import Users from "@/views/system/User/Users";
 import Account from "@/views/system/Account";
 import Dept from "@/views/system/dept/Dept";
 import Tenant from "@/views/system/tenant/Tenant";
+import Customer from "@/views/crm/customer/Customer";
+import TagPage from "@/views/crm/tag/CustomerTag";
+import AssignLog from "@/views/crm/assignLog/AssignLog";
 
 /**
  * key: menuTree 里 component 字段去掉首 /
@@ -21,6 +24,9 @@ const componentMap = {
   "system/dept/Dept": () => <Dept />,
   "system/tenant/Tenant": () => <Tenant />,
   "permission/Role": () => <Role />,
+  "crm/customer/Customer": () => <Customer />,
+  "crm/tag/Tag": () => <TagPage />,
+  "crm/assignLog/AssignLog": () => <AssignLog />,
 };
 
 export default componentMap;

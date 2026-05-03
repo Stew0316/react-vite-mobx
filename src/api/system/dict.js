@@ -76,3 +76,13 @@ export function getDictAll() {
     url: API_PREFIX + "/dict/type/all",
   });
 }
+
+export function getDictItemAll(typeId) {
+  return service({
+    method: "post",
+    url: API_PREFIX + "/dict/item/all",
+    data: {
+      typeId,
+    },
+  });
+}

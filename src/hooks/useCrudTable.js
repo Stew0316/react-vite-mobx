@@ -146,21 +146,24 @@ const useCrudTable = ({
   };
 
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      const request = isEdit
-        ? editApi({
-            ...defaultParams,
-            [editKey]: editKeyValueRef.current,
-            ...values,
-          })
-        : addApi({ ...defaultParams, ...values });
+    return new Promise((resolve, reject) => {
+      form.validateFields().then((values) => {
+        const request = isEdit
+          ? editApi({
+              ...defaultParams,
+              [editKey]: editKeyValueRef.current,
+              ...values,
+            })
+          : addApi({ ...defaultParams, ...values });
 
-      request.then(() => {
-        message.success(isEdit ? "修改成功" : "添加成功");
-        form.resetFields();
-        setIsModalOpen(false);
-        onSuccess?.();
-        getList({ ...defaultParams });
+        request.then(() => {
+          message.success(isEdit ? "修改成功" : "添加成功");
+          form.resetFields();
+          setIsModalOpen(false);
+          onSuccess?.();
+          getList({ ...defaultParams });
+          resolve();
+        });
       });
     });
   };

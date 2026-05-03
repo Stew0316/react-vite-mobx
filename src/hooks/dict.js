@@ -2,12 +2,12 @@ import { useDictStore } from "@/store/dict";
 
 export const useDictArray = (key) => {
   const dict = useDictStore((state) => state.dictArrObject[key]);
-  return dict;
+  return dict || [];
 };
 
 export const useDictObj = (key) => {
   const dict = useDictStore((state) => state.dictMapObject[key]);
-  return dict;
+  return dict || {};
 };
 
 export const useDictObjAndList = (key) => {
@@ -17,7 +17,7 @@ export const useDictObjAndList = (key) => {
       list: state.dictArrObject[key],
     };
   });
-  return dict;
+  return dict || { map: {}, list: [] };
 };
 
 export default {
